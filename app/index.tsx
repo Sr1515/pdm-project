@@ -1,13 +1,15 @@
+import Home from "@/screens/Home";
+import { theme } from "@/theme";
 import React from "react";
-import { Text } from "react-native";
 import 'react-native-reanimated';
+import { ThemeProvider } from "styled-components";
 
 
 export default function App() {
 
-  return (
-    <>
-      <Text style={{ textAlign: "center" }}>Bandido Classico</Text>
-    </>
-  );
+  return(
+    <ThemeProvider theme={theme}>
+      <Home />
+    </ThemeProvider>
+  )
 }
