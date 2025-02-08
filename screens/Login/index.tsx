@@ -16,12 +16,11 @@ export default function Login() {
     return (
         <>
             <ContainerHeader>
+
                 <Title>Login</Title>
                 <Subtitle>Realize aqui o seu login</Subtitle>
 
                 <ContainerLogin>
-
-                    <StatusBar barStyle="dark-content" />
 
                     <InputContainer>
                         <Ionicons name="person-outline" size={25} color={"gray"} />

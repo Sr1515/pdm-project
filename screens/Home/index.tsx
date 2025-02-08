@@ -1,13 +1,17 @@
-import Title from "@/components/Title";
 import React from "react";
 import 'react-native-reanimated';
-import { FlatList } from "react-native"
+import Ionicons from "@expo/vector-icons/Ionicons"
 
-import { Container, Form, Input, Button, ButtonText, ButtonSearch, ButtonAdd, ButtonContainer, ButtonItemActionEdit, ButtonItemActionRemove, ButtonTextItem } from "./styles";
+import { FlatList } from "react-native"
+import Title from "@/components/Title";
+
+import { Container, Form, Input, ButtonText, ButtonSearch, ButtonAdd, ButtonContainer, ButtonItemActionEdit, ButtonItemActionRemove } from "./styles";
+
 import { ProductItem, ProductImage, ProductText, ListEmptyText, ProductDescription, ProductPrice, ProductInfo } from "./styles";
+
 import { FooterMenu } from "@/components/FooterMenu";
 
-import Ionicons from "@expo/vector-icons/Ionicons"
+
 
 const mockSupermarketProducts = [
   {
@@ -92,6 +96,7 @@ export default function Home() {
         <Title>Storage.io</Title>
 
         <Form>
+
           <Input
             placeholder="Pesquise produtos por nome ou categoria"
             placeholderTextColor="#6B6B6B"
@@ -100,6 +105,7 @@ export default function Home() {
           <ButtonSearch>
             <Ionicons name="search-outline" size={32} color={"black"} />
           </ButtonSearch>
+
         </Form>
 
         <ButtonAdd>
@@ -121,9 +127,11 @@ export default function Home() {
               <ProductImage source={{ uri: item.image }} />
 
               <ProductInfo>
+
                 <ProductText>{item.name}</ProductText>
                 <ProductDescription>{item.description}</ProductDescription>
                 <ProductPrice>{item.price}</ProductPrice>
+
               </ProductInfo>
 
               <ButtonContainer>

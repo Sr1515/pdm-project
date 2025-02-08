@@ -8,6 +8,7 @@ import { StatusBar } from "react-native"
 
 import Login from "@/screens/Login";
 import Home from "@/screens/Home";
+import Venda from "@/screens/Venda";
 
 
 export default function App() {
@@ -21,7 +22,7 @@ export default function App() {
       />
 
       <ThemeProvider theme={theme}>
-        <Login />
+        <Venda />
       </ThemeProvider>
 
     </>

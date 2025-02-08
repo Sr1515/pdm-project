@@ -14,14 +14,17 @@ export const FooterMenu = () => {
                 <Ionicons name="cube-outline" size={32} color={"white"} />
                 <MenuText>Vendas</MenuText>
             </MenuItem>
+
             <MenuItem>
                 <Ionicons name="cart-outline" size={32} color={"white"} />
                 <MenuText>Clientes</MenuText>
             </MenuItem>
+
             <MenuItem>
                 <Ionicons name="exit-outline" size={32} color={"white"} />
                 <MenuText>Sair</MenuText>
             </MenuItem>
+
         </Footer>
     );
 };
