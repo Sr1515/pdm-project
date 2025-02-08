@@ -57,7 +57,6 @@ export const ButtonText = styled.Text`
   text-align: center; 
 `;
 
-
 export const Form = styled.View`
   width: 100%;
   display: flex;
@@ -69,71 +68,89 @@ export const Form = styled.View`
 
 // lista de produtos 
 
-
 export const ProductItem = styled.View`
-  width: 360px;
+  flex: 1;
   height: 130px;  
-  flex-direction: row;
-  padding: 15px 10px;  
   background-color: ${props => theme.colors.background};
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  align-items: center;
-  margin-bottom: 10px;
+  border-radius: 10px;
+  margin: 10px 0px;
+  padding: 0px 10px; 
+  width: 98%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center; 
+  border-bottom-width: 2px;
+  border-bottom-color:  ${props => theme.colors.text};;
 `;
 
 export const ProductImage = styled.Image`
   width: 80px;
   height: 80px;
-  border-radius: 8px;
   margin-right: 10px;
+  border-radius: 50px;
 `;
 
 export const ProductInfo = styled.View`
-  flex: 1;  
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  color: ${props => theme.colors.text};
+  font-size: 11px;
+  flex: 1; 
+  padding-left: 15px; 
 `;
+
 
 export const ProductText = styled.Text`
-  font-size: 12px; 
+  font-size: 12px;
   font-weight: bold;
-  color: #333;
-  margin-bottom: 0.5px;  
-  color: ${props => theme.colors.text};
+  color: ${props => theme.colors.text}
 `;
 
+
 export const ProductDescription = styled.Text`
-  font-size: 10px;  
-  color: #666;
-  margin-bottom: 0.5px; 
+  font-size: 11px;
   color: ${props => theme.colors.text};
+  margin-top: 5px;
+
 `;
 
 export const ProductPrice = styled.Text`
-  font-size: 12px;  
+  font-size: 12px;
   font-weight: bold;
-  color: #31CF67;
-  margin-bottom: 0.5px;  
+  color: ${props => theme.colors.text};
+  margin-top: 10px;
 `;
 
-
-export const ButtonA = styled.TouchableOpacity`
-
-  padding: 5px;  
-  border-radius: 50px;
-  width: 19px;  
-  height: 19px;  
-  justify-content: center; 
-  align-items: center;  
-
+export const ButtonItemActionEdit = styled.TouchableOpacity`
+  display: flex;
+  align-items: center;
+  align-content: center;
+  background-color: lightgreen;
+  width: 25px;
+  height: 25px; 
+  border-radius: 5px;
+  margin-bottom: 10px;  
 `;
 
-export const ButtonTextB = styled.Text`
-  font-size: 12px;  
-  color: #333;
+export const ButtonItemActionRemove = styled.TouchableOpacity`
+  display: flex;
+  align-items: center;
+  align-content: center;
+  background-color: red;
+  width: 25px;
+  height: 25px; 
+  border-radius: 5px;
+  margin-bottom: 10px;  
+`;
+
+export const ButtonTextItem = styled.Text`
+  width: 20px;
+  height: 20px;
+`;
+
+export const ButtonContainer = styled.View`
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-left: 15px;
+  gap: 10px;  
 `;
 
 export const ListEmptyText = styled.Text`
@@ -141,12 +158,4 @@ export const ListEmptyText = styled.Text`
   font-size: 16px;
   color: #aaa;
   margin-top: 20px;
-`;
-
-export const ButtonContainer = styled.View`
-  justify-content: center;
-  align-items: flex-end;
-  margin-left: 10px;
-  flex-direction: column;  
-  gap: 8px;  
 `;

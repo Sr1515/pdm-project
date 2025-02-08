@@ -3,8 +3,9 @@ import React from "react";
 import 'react-native-reanimated';
 import { FlatList } from "react-native"
 
-import { Container, Form, Input, Button, ButtonText, ButtonSearch, ButtonAdd, ButtonContainer } from "./styles";
+import { Container, Form, Input, Button, ButtonText, ButtonSearch, ButtonAdd, ButtonContainer, ButtonItemActionEdit, ButtonItemActionRemove, ButtonTextItem } from "./styles";
 import { ProductItem, ProductImage, ProductText, ListEmptyText, ProductDescription, ProductPrice, ProductInfo } from "./styles";
+import { FooterMenu } from "@/components/FooterMenu";
 
 const mockSupermarketProducts = [
   {
@@ -85,6 +86,7 @@ export default function Home() {
   return (
     <>
       <Container>
+
         <Title>Storage.io</Title>
 
         <Form>
@@ -105,9 +107,15 @@ export default function Home() {
         <FlatList
           data={mockSupermarketProducts}
           keyExtractor={item => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={() => (
+            <ListEmptyText>
+              Nenhum produto foi adicionado ainda. Adicione um!
+            </ListEmptyText>
+          )}
           renderItem={({ item }) => (
-            <ProductItem>
 
+            <ProductItem>
               <ProductImage source={{ uri: item.image }} />
 
               <ProductInfo>
@@ -117,28 +125,25 @@ export default function Home() {
               </ProductInfo>
 
               <ButtonContainer>
-                <Button>
-                  <ButtonText>✏️</ButtonText>
-                </Button>
-                <Button>
-                  <ButtonText>❌</ButtonText>
-                </Button>
+
+                <ButtonItemActionEdit>
+                  <ButtonTextItem>✏️</ButtonTextItem>
+                </ButtonItemActionEdit>
+
+                <ButtonItemActionRemove>
+                  <ButtonTextItem>❌</ButtonTextItem>
+                </ButtonItemActionRemove>
+
               </ButtonContainer>
 
-
             </ProductItem>
-          )}
 
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={() => (
-            <ListEmptyText>
-              Nenhum produto foi adicionado ainda. Adicione um!
-            </ListEmptyText>
           )}
-
         />
 
       </Container>
+
+      <FooterMenu />
     </>
   );
 }
