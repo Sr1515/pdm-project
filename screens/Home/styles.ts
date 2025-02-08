@@ -12,7 +12,7 @@ export const Input = styled.TextInput`
   height: 56px;
   background-color: ${props => theme.colors.text};
   border-radius: 5px;
-  color: #fff;
+  color: ${props => theme.colors.background};
   padding: 16px;
   font-size: 16px;
   margin-right: 12px;
@@ -35,7 +35,6 @@ export const ButtonAdd = styled.TouchableOpacity`
   background-color: ${props => props.theme.colors.accent};
   align-items: center;
   justify-content: center;
-  
   border-bottom-width: 6px; 
   border-bottom-color: ${props => props.theme.colors.primary};
 `;

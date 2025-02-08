@@ -1,9 +1,13 @@
-import Home from "@/screens/Home";
-import { theme } from "@/theme";
 import React from "react";
+import { theme } from "@/theme";
 import 'react-native-reanimated';
+
 import { ThemeProvider } from "styled-components";
 import { StatusBar } from "react-native"
+
+
+import Login from "@/screens/Login";
+import Home from "@/screens/Home";
 
 
 export default function App() {
@@ -17,7 +21,7 @@ export default function App() {
       />
 
       <ThemeProvider theme={theme}>
-        <Home />
+        <Login />
       </ThemeProvider>
 
     </>

@@ -7,6 +7,8 @@ import { Container, Form, Input, Button, ButtonText, ButtonSearch, ButtonAdd, Bu
 import { ProductItem, ProductImage, ProductText, ListEmptyText, ProductDescription, ProductPrice, ProductInfo } from "./styles";
 import { FooterMenu } from "@/components/FooterMenu";
 
+import Ionicons from "@expo/vector-icons/Ionicons"
+
 const mockSupermarketProducts = [
   {
     id: 1,
@@ -96,7 +98,7 @@ export default function Home() {
           />
 
           <ButtonSearch>
-            <ButtonText>🔍</ButtonText>
+            <Ionicons name="search-outline" size={32} color={"black"} />
           </ButtonSearch>
         </Form>
 
@@ -127,11 +129,11 @@ export default function Home() {
               <ButtonContainer>
 
                 <ButtonItemActionEdit>
-                  <ButtonTextItem>✏️</ButtonTextItem>
+                  <Ionicons name="pencil-outline" size={25} color={"white"} />
                 </ButtonItemActionEdit>
 
                 <ButtonItemActionRemove>
-                  <ButtonTextItem>❌</ButtonTextItem>
+                  <Ionicons name="trash-bin-outline" size={25} color={"white"} />
                 </ButtonItemActionRemove>
 
               </ButtonContainer>
