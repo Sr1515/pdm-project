@@ -10,6 +10,7 @@ import Login from "@/screens/Login";
 import Home from "@/screens/Home";
 import Venda from "@/screens/Venda";
 import SignUp from "@/screens/SignUp";
+import Cliente from "@/screens/Cliente";
 
 
 export default function App() {
@@ -23,7 +24,7 @@ export default function App() {
       />
 
       <ThemeProvider theme={theme}>
-        <SignUp />
+        <Cliente />
       </ThemeProvider>
 
     </>

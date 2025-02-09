@@ -7,6 +7,13 @@ export const Container = styled.View`
   padding: 24px;
 `;
 
+export const TableContainer = styled.View`
+  flex: 1;
+  background-color: ${props => theme.colors.background};
+  width: 100%;
+  padding-top: 10px;
+`;
+
 export const Form = styled.View`
   width: 100%;
   display: flex;
@@ -14,13 +21,6 @@ export const Form = styled.View`
   margin-top: 36px;
   margin-bottom: 20px;
   justify-content: space-between;
-`;
-
-export const TableContainer = styled.View`
-  flex: 1;
-  background-color: ${props => theme.colors.background};
-  width: 100%;
-  padding-top: 40px;
 `;
 
 export const TableHeader = styled.View`
@@ -31,9 +31,29 @@ export const TableHeader = styled.View`
   gap: 40px;
   padding: 10px;
   background-color: ${props => theme.colors.background};
-  border-bottom-width: 1px;
-  border-bottom-color: #ccc;
+  border: 1px;
+  border-radius: 5px;
+  border-color: ${props => theme.colors.text};
 `;
+
+export const ButtonAdd = styled.TouchableOpacity`
+  width: 100%;
+  height: 56px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  background-color: ${props => props.theme.colors.accent};
+  align-items: center;
+  justify-content: center;
+  border-bottom-width: 6px; 
+  border-bottom-color: ${props => props.theme.colors.primary};
+`;
+
+export const ButtonText = styled.Text`
+  color: #fff;
+  font-size: 32px; 
+  text-align: center; 
+`;
+
 
 export const HeaderText = styled.Text`
   color: ${props => theme.colors.text};
@@ -79,4 +99,24 @@ export const EmptyText = styled.Text`
   margin-top: 20px;
   font-size: 16px;
   color: #666;
+`;
+
+export const Input = styled.TextInput`
+  flex: 1; 
+  height: 56px;
+  background-color: ${props => theme.colors.text};
+  border-radius: 5px;
+  color: ${props => theme.colors.background};
+  padding: 16px;
+  font-size: 16px;
+  margin-right: 12px;
+`;
+
+export const ButtonSearch = styled.TouchableOpacity`
+  width: 56px;  
+  height: 56px;
+  border-radius: 5px;
+  background-color: ${props => theme.colors.text};
+  align-items: center;
+  justify-content: center;
 `;
