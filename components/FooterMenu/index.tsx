@@ -19,12 +19,10 @@ export const FooterMenu = () => {
                 <Ionicons name="cart-outline" size={32} color={"white"} />
                 <MenuText>Clientes</MenuText>
             </MenuItem>
-
             <MenuItem>
                 <Ionicons name="exit-outline" size={32} color={"white"} />
                 <MenuText>Sair</MenuText>
             </MenuItem>
-
         </Footer>
     );
 };

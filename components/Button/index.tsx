@@ -1,6 +1,7 @@
 import React from "react";
 import { Text } from "react-native";
-import { ButtonDefault } from "./styles";
+import { ButtonDefault, TextButton } from "./styles";
+import { color } from "@rneui/base";
 
 type IButton = {
     children: React.ReactNode;
@@ -9,7 +10,7 @@ type IButton = {
 export default function Button({ children }: IButton) {
     return (
         <ButtonDefault>
-            <Text>{children}</Text>
-        </ButtonDefault>
+            <TextButton>{children}</TextButton>
+        </ButtonDefault >
     );
 }

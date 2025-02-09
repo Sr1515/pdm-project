@@ -10,3 +10,9 @@ export const ButtonDefault = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
 `;
+
+
+export const TextButton = styled.Text`
+    color: ${props => theme.colors.text};
+    font-weight: bold;
+`

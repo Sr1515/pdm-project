@@ -38,6 +38,7 @@ export default function Login() {
                             placeholder="Senha"
                             placeholderTextColor="gray"
                             underlineColorAndroid="transparent"
+                            secureTextEntry={true}
                         />
                     </InputContainer>
 
@@ -48,7 +49,6 @@ export default function Login() {
                 </ContainerLogin>
             </ContainerHeader>
 
-            <FooterMenu />
         </>
     );
 }

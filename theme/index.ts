@@ -7,7 +7,7 @@ export const theme = ({
     weightBold: 700, // Peso bold da fonte
   },
   fontSizes: {
-    h1: '20', // Tamanho do título h1
+    h1: '30', // Tamanho do título h1
     h2: '14', // Tamanho do título h2
     h3: '9', // Tamanho do título h3
     h4: '8', // Tamanho do título h4
