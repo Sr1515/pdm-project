@@ -11,6 +11,7 @@ import Home from "@/screens/Home";
 import Venda from "@/screens/Venda";
 import SignUp from "@/screens/SignUp";
 import Cliente from "@/screens/Cliente";
+import AddProduct from "@/screens/AddProduct";
 
 
 export default function App() {
@@ -24,7 +25,7 @@ export default function App() {
       />
 
       <ThemeProvider theme={theme}>
-        <Cliente />
+        <AddProduct />
       </ThemeProvider>
 
     </>
