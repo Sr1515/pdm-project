@@ -14,6 +14,7 @@ import Cliente from "@/screens/Cliente";
 import AddProduct from "@/screens/AddProduct";
 import AddCliente from "@/screens/AddCliente";
 import MapCliente from "@/screens/MapCliente";
+import GerenciadorVendas from "@/screens/GerenciadorVendas";
 
 
 export default function App() {
@@ -27,7 +28,7 @@ export default function App() {
       />
 
       <ThemeProvider theme={theme}>
-        <MapCliente />
+        <GerenciadorVendas />
       </ThemeProvider>
 
     </>
