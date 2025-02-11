@@ -13,6 +13,7 @@ import SignUp from "@/screens/SignUp";
 import Cliente from "@/screens/Cliente";
 import AddProduct from "@/screens/AddProduct";
 import AddCliente from "@/screens/AddCliente";
+import MapCliente from "@/screens/MapCliente";
 
 
 export default function App() {
@@ -26,7 +27,7 @@ export default function App() {
       />
 
       <ThemeProvider theme={theme}>
-        <AddCliente />
+        <MapCliente />
       </ThemeProvider>
 
     </>
