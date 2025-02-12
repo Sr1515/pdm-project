@@ -1,21 +1,23 @@
-import Title from "@/components/Title";
+
 import React from "react";
 import 'react-native-reanimated';
 
-import { FooterMenu } from "@/components/FooterMenu";
+import Ionicons from "@expo/vector-icons/Ionicons"
+
+import {
+    ButtonSignUp, Container, ContainerSignUp,
+    InputContainer, InputSignUp, LoginLink, Text, TextContainer
+} from "./style";
 
 import Subtitle from "@/components/Subtitle";
-import { StatusBar } from "react-native";
+import Title from "@/components/Title";
 import Button from "@/components/Button";
-import Ionicons from "@expo/vector-icons/Ionicons"
-import { ButtonSignUp, ContainerHeader, ContainerSignUp, InputContainer, InputSignUp, LoginLink, SignUpButtonFooter, Text, TextContainer } from "./style";
-
 
 export default function SignUp() {
 
     return (
         <>
-            <ContainerHeader>
+            <Container>
 
                 <Title>Registre sua conta</Title>
                 <Subtitle>Crie aqui sua conta</Subtitle>
@@ -72,7 +74,8 @@ export default function SignUp() {
                     </TextContainer>
 
                 </ContainerSignUp>
-            </ContainerHeader>
+
+            </Container>
         </>
     );
 }

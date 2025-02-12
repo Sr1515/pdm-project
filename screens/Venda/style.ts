@@ -7,15 +7,6 @@ export const Container = styled.View`
   padding: 24px;
 `;
 
-export const Form = styled.View`
-  width: 100%;
-  display: flex;
-  flex-direction: row; 
-  margin-top: 36px;
-  margin-bottom: 20px;
-  justify-content: space-between;
-`;
-
 export const TableContainer = styled.View`
   flex: 1;
   background-color: ${props => theme.colors.background};

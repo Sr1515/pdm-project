@@ -39,23 +39,6 @@ export const ButtonAdd = styled.TouchableOpacity`
   border-bottom-color: ${props => props.theme.colors.primary};
 `;
 
-export const Button = styled.TouchableOpacity`
-  background-color: #e0e0e0;
-  padding: 5px;
-  border-radius: 50px;
-  width: 19px;
-  height: 19px;
-  justify-content: center;
-  align-items: center;
-  margin-left: 5px;  
-`;
-
-export const ButtonText = styled.Text`
-  color: #fff;
-  font-size: 32px; 
-  text-align: center; 
-`;
-
 export const Form = styled.View`
   width: 100%;
   display: flex;
@@ -65,7 +48,6 @@ export const Form = styled.View`
   justify-content: space-between;
 `;
 
-// lista de produtos 
 
 export const ProductItem = styled.View`
   flex: 1;
@@ -107,7 +89,6 @@ export const ProductDescription = styled.Text`
   font-size: 11px;
   color: ${props => theme.colors.text};
   margin-top: 5px;
-
 `;
 
 export const ProductPrice = styled.Text`
@@ -137,11 +118,6 @@ export const ButtonItemActionRemove = styled.TouchableOpacity`
   height: 25px; 
   border-radius: 5px;
   margin-bottom: 10px;  
-`;
-
-export const ButtonTextItem = styled.Text`
-  width: 20px;
-  height: 20px;
 `;
 
 export const ButtonContainer = styled.View`

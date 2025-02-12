@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 
-export const TitleContainer = styled.Text`
+export const Container = styled.Text`
     background-color: ${props => props.theme.colors.background};
     padding: 20px;
     padding-bottom: 0px;

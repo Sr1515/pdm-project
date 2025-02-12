@@ -1,13 +1,18 @@
 import React from "react";
 import 'react-native-reanimated';
+import { FlatList } from "react-native"
+
 import Ionicons from "@expo/vector-icons/Ionicons"
 
-import { FlatList } from "react-native"
+import {
+    ActionsContainer, ButtonSearch,
+    Container, EmptyText, Form, HeaderText, Input, RemoveButton,
+    RowText, TableContainer, TableHeader, TableRow
+} from "./style";
+
 import Title from "@/components/Title";
-
-import { FooterMenu } from "@/components/FooterMenu";
-import { ActionsContainer, ButtonAdd, ButtonSearch, ButtonText, Container, EmptyText, Form, HeaderText, Input, RemoveButton, RowText, TableContainer, TableHeader, TableRow } from "./style";
-
+import FooterMenu from "@/components/FooterMenu";
+import Button from "@/components/Button";
 
 const mockProductsSell = [
     { id: 1, email: 'cafe@gmail.com', client: 'Samuel' },
@@ -26,7 +31,6 @@ const mockProductsSell = [
     { id: 14, email: 'cafe@gmail.com', client: 'Samuel' },
     { id: 15, email: 'cafe@gmail.com', client: 'Samuel' },
 ];
-
 
 export default function Cliente() {
 
@@ -49,10 +53,7 @@ export default function Cliente() {
 
                 </Form>
 
-                <ButtonAdd>
-                    <ButtonText>Adicionar Cliente</ButtonText>
-                </ButtonAdd>
-
+                <Button>Adicionar Cliente</Button>
 
                 <TableContainer>
 
@@ -81,9 +82,11 @@ export default function Cliente() {
                                 <RowText>{item.email}</RowText>
 
                                 <ActionsContainer>
+
                                     <RemoveButton>
                                         <Ionicons name="trash-bin-outline" size={15} color={"white"} />
                                     </RemoveButton>
+
                                 </ActionsContainer>
 
                             </TableRow>

@@ -13,31 +13,13 @@ export const StyledMapView = styled(MapView)`
   height: 70%;
 `;
 
-export const ClientList = styled.View`
-  padding: 10px;
-`;
-
-export const ClientItem = styled.View`
-  background-color: #fff;
-  padding: 15px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-export const ClientName = styled.Text`
-  font-size: 16px;
-  color: #333;
-`;
-
-export const ClientInfo = styled.Text`
-  font-size: 14px;
-  color: #666;
-`;
-
 export const ButtonClientes = styled.View`
-  align-items: center; 
+  flex: 1;
+  width: 80%;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
   margin-top: 20px; 
+  margin-left: 40px;
 `;

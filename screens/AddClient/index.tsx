@@ -1,13 +1,20 @@
 import React, { useState } from "react";
-import { StatusBar, ScrollView } from "react-native";
+
+import { ScrollView } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import { ButtonAdd, ContainerAddProduct, ContainerHeader, InputAddProduct, InputContainer, InputLabel, MapContainer } from "./styles";
+
+import {
+    ButtonAddContainer, Container, ContainerAddClient, ContainerInput,
+    InputAddClient, InputLabel, MapContainer
+} from "./styles";
+
+
 import Title from "@/components/Title";
-import { FooterMenu } from "@/components/FooterMenu";
 import Button from "@/components/Button";
+import FooterMenu from "@/components/FooterMenu";
 
+export default function AddClient() {
 
-export default function AddCliente() {
     const [region, setRegion] = useState({
         latitude: -23.5505,
         longitude: -46.6333,
@@ -17,63 +24,67 @@ export default function AddCliente() {
 
     return (
         <>
-            <StatusBar barStyle="dark-content" />
-            <ContainerHeader>
-                <Title>Registrar Cliente</Title>
-                <ScrollView>
-                    <ContainerAddProduct>
+            <Container>
 
-                        <InputContainer>
+                <Title>Registrar Cliente</Title>
+
+                <ScrollView>
+
+                    <ContainerAddClient>
+
+                        <ContainerInput>
                             <InputLabel>Nome do cliente</InputLabel>
-                            <InputAddProduct
+                            <InputAddClient
                                 placeholder="Digite o nome do cliente"
                                 placeholderTextColor="gray"
                                 underlineColorAndroid="transparent"
                             />
-                        </InputContainer>
+                        </ContainerInput>
 
-                        <InputContainer>
+                        <ContainerInput>
                             <InputLabel>Email</InputLabel>
-                            <InputAddProduct
+                            <InputAddClient
                                 placeholder="Digite o email"
                                 placeholderTextColor="gray"
                                 keyboardType="email-address"
                                 underlineColorAndroid="transparent"
                             />
-                        </InputContainer>
+                        </ContainerInput>
 
-                        <InputContainer>
+                        <ContainerInput>
                             <InputLabel>Contato</InputLabel>
-                            <InputAddProduct
+                            <InputAddClient
                                 placeholder="Digite o número de contato"
                                 placeholderTextColor="gray"
                                 keyboardType="phone-pad"
                                 underlineColorAndroid="transparent"
                             />
-                        </InputContainer>
+                        </ContainerInput>
 
-                        <InputContainer>
+                        <ContainerInput>
                             <InputLabel>Tipo de identificador</InputLabel>
-                            <InputAddProduct
+                            <InputAddClient
                                 placeholder="Digite o tipo do identificador"
                                 placeholderTextColor="gray"
                                 underlineColorAndroid="transparent"
                             />
-                        </InputContainer>
+                        </ContainerInput>
 
 
-                        <InputContainer>
+                        <ContainerInput>
                             <InputLabel>Identificador</InputLabel>
-                            <InputAddProduct
+                            <InputAddClient
                                 placeholder="Digite o identificador"
                                 placeholderTextColor="gray"
                                 keyboardType="numeric"
                                 underlineColorAndroid="transparent"
                             />
-                        </InputContainer>
+                        </ContainerInput>
 
                         <InputLabel>Localização</InputLabel>
+
                         <MapContainer>
+
                             <MapView
                                 style={{ flex: 1 }}
                                 region={region}
@@ -86,15 +97,19 @@ export default function AddCliente() {
                                     }}
                                 />
                             </MapView>
+
                         </MapContainer>
 
-                        <ButtonAdd>
+                        <ButtonAddContainer>
                             <Button>Adicionar Cliente</Button>
-                        </ButtonAdd>
+                        </ButtonAddContainer>
 
-                    </ContainerAddProduct>
+                    </ContainerAddClient>
+
                 </ScrollView>
-            </ContainerHeader>
+
+            </Container>
+
             <FooterMenu />
         </>
     );

@@ -1,19 +1,31 @@
 import React from "react";
 import 'react-native-reanimated';
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { View, TouchableOpacity, Text, StyleSheet, ScrollView } from "react-native";
+import { View, ScrollView } from "react-native";
 
+import Ionicons from "@expo/vector-icons/Ionicons";
+
+import {
+    ButtonAddFooter,
+    ButtonInput,
+    Container, Form, Input,
+    InputAddProduct, InputContainer, InputLabel
+} from "./styles";
+
+import FooterMenu from "@/components/FooterMenu";
 import Title from "@/components/Title";
-import { FooterMenu } from "@/components/FooterMenu";
 import Subtitle from "@/components/Subtitle";
-import { Button, ButtonFooter, ButtonOptions, ButtonText, Container, ContainerHeader, Form, Input, InputAddProduct, InputContainer, InputLabel } from "./styles";
+import Button from "@/components/Button";
+
 
 export default function GerenciadorVendas() {
+
     return (
         <>
 
             <ScrollView>
-                <ContainerHeader>
+
+                <Container>
+
                     <Title>Gerenciador de Vendas</Title>
                     <Subtitle>Adicionar nova venda</Subtitle>
 
@@ -29,39 +41,36 @@ export default function GerenciadorVendas() {
                         </InputContainer>
 
                         <Form>
+
                             <Input
                                 placeholder="1"
                                 placeholderTextColor="#6B6B6B"
                                 keyboardType="numeric"
                             />
-                            <Button>
+
+                            <ButtonInput>
                                 <Ionicons name="add-outline" size={32} color={"black"} />
-                            </Button>
-                            <Button>
+                            </ButtonInput>
+
+                            <ButtonInput>
                                 <Ionicons name="remove-outline" size={32} color={"black"} />
-                            </Button>
+                            </ButtonInput>
 
 
                         </Form>
 
                     </View>
 
+                    <ButtonAddFooter>
+                        <Button>Adicionar Produto</Button>
+                    </ButtonAddFooter>
+
                     <Container>
-
-                        <ButtonFooter>
-                            <ButtonText>Adicionar Produto</ButtonText>
-                        </ButtonFooter>
-
-                        <ButtonOptions>
-                            <ButtonText>Realizar Venda</ButtonText>
-                        </ButtonOptions>
-
-                        <ButtonOptions>
-                            <ButtonText>Histórico de Vendas</ButtonText>
-                        </ButtonOptions>
+                        <Button>Realizar Venda</Button>
+                        <Button>Histórico de Vendas</Button>
                     </Container>
 
-                </ContainerHeader>
+                </Container>
             </ScrollView >
 
             <FooterMenu />

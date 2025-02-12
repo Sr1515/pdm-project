@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import { StatusBar, Alert, ScrollView, Text } from "react-native";
+import { StatusBar, Alert, ScrollView } from "react-native";
+
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
-import Title from "@/components/Title";
-import Button from "@/components/Button";
-import { FooterMenu } from "@/components/FooterMenu";
+
 import {
     AddImageButton,
     AddImageButtonText,
-    ButtonAdd,
+    Container,
     ContainerAddProduct,
-    ContainerHeader,
     InputAddProduct,
     InputContainer,
     InputLabel,
@@ -18,7 +16,13 @@ import {
     ProductImageContainer,
 } from "./styles";
 
+import Title from "@/components/Title";
+import Button from "@/components/Button";
+import FooterMenu from "@/components/FooterMenu";
+
+
 export default function AddProduct() {
+
     const [image, setImage] = useState<string | null>(null);
 
     const pickImage = async () => {
@@ -42,11 +46,14 @@ export default function AddProduct() {
 
     return (
         <>
-            <StatusBar barStyle="dark-content" />
-            <ContainerHeader>
+            <Container>
+
                 <Title>Adicionar produto</Title>
+
                 <ScrollView>
+
                     <ContainerAddProduct>
+
                         <InputContainer>
                             <InputLabel>Nome do produto</InputLabel>
                             <InputAddProduct
@@ -114,18 +121,26 @@ export default function AddProduct() {
                         </InputContainer>
 
                         <InputLabel>Imagem do produto</InputLabel>
+
                         <ProductImageContainer>
                             {image && <ProductImage source={{ uri: image }} />}
+
                             <AddImageButton onPress={pickImage}>
+
                                 <Ionicons name="camera" size={20} color="white" />
                                 <AddImageButtonText>Adicionar Imagem</AddImageButtonText>
+
                             </AddImageButton>
 
                             <Button>Adicionar produto</Button>
                         </ProductImageContainer>
+
                     </ContainerAddProduct>
+
                 </ScrollView>
-            </ContainerHeader>
+
+            </Container>
+
             <FooterMenu />
         </>
     );

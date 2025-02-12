@@ -1,17 +1,25 @@
 import React from "react";
 import 'react-native-reanimated';
+import { FlatList } from "react-native"
+
 import Ionicons from "@expo/vector-icons/Ionicons"
 
-import { FlatList } from "react-native"
+import {
+  Container, Form, Input,
+  ButtonSearch, ButtonContainer,
+  ButtonItemActionEdit, ButtonItemActionRemove
+} from "./styles";
+
+import {
+  ProductItem, ProductImage, ProductText,
+  ListEmptyText, ProductDescription,
+  ProductPrice, ProductInfo
+} from "./styles";
+
+
 import Title from "@/components/Title";
-
-import { Container, Form, Input, ButtonText, ButtonSearch, ButtonAdd, ButtonContainer, ButtonItemActionEdit, ButtonItemActionRemove } from "./styles";
-
-import { ProductItem, ProductImage, ProductText, ListEmptyText, ProductDescription, ProductPrice, ProductInfo } from "./styles";
-
-import { FooterMenu } from "@/components/FooterMenu";
-
-
+import FooterMenu from "@/components/FooterMenu";
+import Button from "@/components/Button";
 
 const mockSupermarketProducts = [
   {
@@ -108,11 +116,10 @@ export default function Home() {
 
         </Form>
 
-        <ButtonAdd>
-          <ButtonText>Novo item</ButtonText>
-        </ButtonAdd>
+        <Button>Novo item</Button>
 
         <FlatList
+
           data={mockSupermarketProducts}
           keyExtractor={item => item.id.toString()}
           showsVerticalScrollIndicator={false}
@@ -124,6 +131,7 @@ export default function Home() {
           renderItem={({ item }) => (
 
             <ProductItem>
+
               <ProductImage source={{ uri: item.image }} />
 
               <ProductInfo>

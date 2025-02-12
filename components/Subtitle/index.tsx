@@ -1,6 +1,6 @@
 import React from "react";
 import { Text } from "react-native";
-import { SubTitleContainer } from "./styles";
+import { Container } from "./styles";
 
 
 type ISubtitle = {
@@ -8,5 +8,5 @@ type ISubtitle = {
 }
 
 export default function Subtitle({ children }: ISubtitle) {
-    return <SubTitleContainer><Text>{children}</Text></SubTitleContainer>
+    return <Container><Text>{children}</Text></Container>
 }

@@ -1,7 +1,7 @@
 import { theme } from "@/theme";
 import styled from "styled-components/native";
 
-export const ContainerHeader = styled.View`
+export const Container = styled.View`
   flex: 1;
   background-color: ${props => props.theme.colors.background}; 
   padding: 26px;
@@ -33,14 +33,6 @@ export const InputSignUp = styled.TextInput`
   padding-left: 10px; 
 `;
 
-
-export const TitleSignUp = styled.Text`
-  font-size: 24px;
-  color: #000;
-  margin-bottom: 20px;
-`;
-
-
 export const ButtonSignUp = styled.TouchableOpacity`
   width: 86%;
   height: 50px;
@@ -49,15 +41,6 @@ export const ButtonSignUp = styled.TouchableOpacity`
   align-items: center;
   border-radius: 5px;
 `;
-
-export const SignUpButtonFooter = styled.TouchableOpacity`
-  width: 86%;
-  height: 50px;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-`;
-
 
 export const TextContainer = styled.View`
   padding-top: 20px;
@@ -76,10 +59,3 @@ export const LoginLink = styled.Text`
   text-decoration: underline; 
   margin-left: 5px; 
 `;
-
-
-export const ButtonTextSignUp = styled.Text`
-  color: #fff;
-  font-size: 18px;
-`;
-

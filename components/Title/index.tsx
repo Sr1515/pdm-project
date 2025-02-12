@@ -1,11 +1,11 @@
 import React from "react";
 import { Text } from "react-native";
-import { TitleContainer } from "./styled"
+import { Container } from "./styled"
 
 type ITitle = {
     children: any
 }
 
-export default function Title({children}: ITitle){
-    return <TitleContainer><Text>{children}</Text></TitleContainer>
+export default function Title({ children }: ITitle) {
+    return <Container><Text>{children}</Text></Container>
 }

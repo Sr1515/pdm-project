@@ -1,13 +1,17 @@
 import React from "react";
 import 'react-native-reanimated';
+import { FlatList } from "react-native"
+
 import Ionicons from "@expo/vector-icons/Ionicons"
 
-import { FlatList } from "react-native"
+import {
+    ActionsContainer, Container, EmptyText,
+    HeaderText, RemoveButton, RowText,
+    TableContainer, TableHeader, TableRow
+} from "./style";
+
+import FooterMenu from "@/components/FooterMenu";
 import Title from "@/components/Title";
-
-import { FooterMenu } from "@/components/FooterMenu";
-import { ActionsContainer, Container, EmptyText, HeaderText, RemoveButton, RowText, TableContainer, TableHeader, TableRow } from "./style";
-
 
 const mockProductsSell = [
     { id: 1, name: 'cafe', client: 'Samuel' },
@@ -26,7 +30,6 @@ const mockProductsSell = [
     { id: 14, name: 'cafe', client: 'Joao' },
     { id: 15, name: 'cafe', client: 'Jose' },
 ];
-
 
 export default function Venda() {
 

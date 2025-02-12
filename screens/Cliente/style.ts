@@ -36,24 +36,11 @@ export const TableHeader = styled.View`
   border-color: ${props => theme.colors.text};
 `;
 
-export const ButtonAdd = styled.TouchableOpacity`
-  width: 100%;
-  height: 56px;
-  border-radius: 5px;
-  margin-bottom: 20px;
-  background-color: ${props => props.theme.colors.accent};
-  align-items: center;
-  justify-content: center;
-  border-bottom-width: 6px; 
-  border-bottom-color: ${props => props.theme.colors.primary};
-`;
-
 export const ButtonText = styled.Text`
   color: #fff;
   font-size: 32px; 
   text-align: center; 
 `;
-
 
 export const HeaderText = styled.Text`
   color: ${props => theme.colors.text};

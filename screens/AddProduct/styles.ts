@@ -1,7 +1,6 @@
-import { theme } from "@/theme";
 import styled from "styled-components/native";
 
-export const ContainerHeader = styled.View`
+export const Container = styled.View`
   flex: 1;
   background-color: ${props => props.theme.colors.background};
   padding: 26px;
@@ -10,7 +9,7 @@ export const ContainerHeader = styled.View`
 export const ContainerAddProduct = styled.View`
   flex: 1;
   width: 100%;
-  background-color: ${props => theme.colors.background};
+  background-color: ${props => props.theme.colors.background};
   gap: 30px;
   padding: 10px;
 `;
@@ -74,19 +73,3 @@ export const AddImageButtonText = styled.Text`
   font-weight: bold;
 `;
 
-export const ButtonAdd = styled.TouchableOpacity`
-  width: 100%;
-  height: 50px;
-  justify-content: center;
-  align-items: center;
-  background-color: ${props => props.theme.colors.primary};
-  border-radius: 8px;
-  margin-top: 20px;
-`;
-
-export const FooterMenu = styled.View`
-  padding-top: 20px;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-`;

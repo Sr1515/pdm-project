@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { Marker } from "react-native-maps";
-import Title from "@/components/Title";
-import { FooterMenu } from "@/components/FooterMenu";
-import Button from "@/components/Button";
+
 import { ButtonClientes, Container, StyledMapView } from "./styles";
 
+import Button from "@/components/Button";
+import Title from "@/components/Title";
+import FooterMenu from "@/components/FooterMenu";
 
 const clients = [
     { id: 225, name: 'Itapioca', latitude: -3.7327, longitude: -38.5267 },
@@ -21,6 +22,7 @@ const clients = [
 ];
 
 export default function MapCliente() {
+
     const initialRegion = {
         latitude: -5.1457,
         longitude: -38.0987,
@@ -31,6 +33,7 @@ export default function MapCliente() {
     return (
         <>
             <Container>
+
                 <Title>Encontre seus clientes</Title>
 
                 <StyledMapView initialRegion={initialRegion}>

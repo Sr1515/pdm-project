@@ -1,7 +1,7 @@
 import { theme } from "@/theme";
 import styled from "styled-components/native";
 
-export const ContainerHeader = styled.View`
+export const Container = styled.View`
   flex: 1;
   background-color: ${props => props.theme.colors.background};
   padding: 26px;
@@ -15,6 +15,14 @@ export const InputContainer = styled.View`
   margin-top: 40px;
 `;
 
+export const InputLabel = styled.Text`
+  font-size: 14px;
+  justify-content: start;
+  color: gray;
+  font-weight: bold;
+  margin-bottom: 5px;  
+`;
+
 export const InputAddProduct = styled.TextInput`
   width: 100%;  
   color: gray;
@@ -22,14 +30,6 @@ export const InputAddProduct = styled.TextInput`
   border-bottom-width: 1px; 
   border-bottom-color: gray; 
   background-color: transparent; 
-`;
-
-export const InputLabel = styled.Text`
-  font-size: 14px;
-  justify-content: start;
-  color: gray;
-  font-weight: bold;
-  margin-bottom: 5px;  
 `;
 
 export const Form = styled.View`
@@ -55,7 +55,7 @@ export const Input = styled.TextInput`
     margin-right: 10px;
 `;
 
-export const Button = styled.TouchableOpacity`
+export const ButtonInput = styled.TouchableOpacity`
     padding: 7px;
     background-color: ${props => theme.colors.text};
     border-radius: 5px;
@@ -64,37 +64,13 @@ export const Button = styled.TouchableOpacity`
     justify-content: center;
 `;
 
-export const Container = styled.View`
-    flex: 1;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    background-color: ${props => theme.colors.background}
-`;
-
-export const ButtonFooter = styled.TouchableOpacity`
-  width: 180px;
-  height: 50px;
+export const ButtonAddFooter = styled.TouchableOpacity`
+  flex: 1;
+  width: 230px;
+  height: 0px;
   border-radius: 5px;
+  padding-top: 10px;
   margin-bottom: 60px;
-  background-color: ${props => props.theme.colors.accent};
-  align-items: center;
-  justify-content: center;
-`;
-
-export const ButtonOptions = styled.TouchableOpacity`
-  width: 100%;
-  height: 50px;
-  border-radius: 5px;
-  margin-bottom: 20px;
-  background-color: ${props => props.theme.colors.accent};
-  align-items: center;
-  justify-content: center;
-  margin-top: 10px;
-`
-
-export const ButtonText = styled.Text`
-    color: #ffffff;
-    font-size: 18px;
-    font-weight: bold;
+  background-color: ${props => props.theme.colors.background};
+  margin-left: 17%;
 `;

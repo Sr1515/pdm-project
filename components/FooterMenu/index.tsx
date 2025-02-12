@@ -1,10 +1,12 @@
 import React from "react";
-import { Footer, MenuItem, MenuText } from "./style";
+import { Container, MenuItem, MenuText } from "./style";
 import Ionicons from "@expo/vector-icons/Ionicons"
 
-export const FooterMenu = () => {
+export default function FooterMenu() {
     return (
-        <Footer>
+
+        <Container>
+
             <MenuItem>
                 <Ionicons name="home" size={32} color={"white"} />
                 <MenuText>Home</MenuText>
@@ -19,10 +21,12 @@ export const FooterMenu = () => {
                 <Ionicons name="cart-outline" size={32} color={"white"} />
                 <MenuText>Clientes</MenuText>
             </MenuItem>
+
             <MenuItem>
                 <Ionicons name="exit-outline" size={32} color={"white"} />
                 <MenuText>Sair</MenuText>
             </MenuItem>
-        </Footer>
+
+        </Container>
     );
 };

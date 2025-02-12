@@ -1,10 +1,9 @@
 import React from "react";
-import { theme } from "@/theme";
 import 'react-native-reanimated';
 
 import { ThemeProvider } from "styled-components";
 import { StatusBar } from "react-native"
-
+import { theme } from "@/theme";
 
 import Login from "@/screens/Login";
 import Home from "@/screens/Home";
@@ -12,9 +11,9 @@ import Venda from "@/screens/Venda";
 import SignUp from "@/screens/SignUp";
 import Cliente from "@/screens/Cliente";
 import AddProduct from "@/screens/AddProduct";
-import AddCliente from "@/screens/AddCliente";
 import MapCliente from "@/screens/MapCliente";
 import GerenciadorVendas from "@/screens/GerenciadorVendas";
+import AddClient from "@/screens/AddClient";
 
 
 export default function App() {
@@ -28,7 +27,7 @@ export default function App() {
       />
 
       <ThemeProvider theme={theme}>
-        <GerenciadorVendas />
+        <AddClient />
       </ThemeProvider>
 
     </>

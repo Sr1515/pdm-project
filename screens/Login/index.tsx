@@ -1,21 +1,23 @@
-import Title from "@/components/Title";
 import React from "react";
 import 'react-native-reanimated';
 
-import { ButtonLogin, ButtonTextLogin, ContainerHeader, ContainerLogin, InputContainer, InputLogin, TitleLogin } from "./styles";
-import { FooterMenu } from "@/components/FooterMenu";
-
-import Subtitle from "@/components/Subtitle";
-import { StatusBar } from "react-native";
-import Button from "@/components/Button";
 import Ionicons from "@expo/vector-icons/Ionicons"
+
+import {
+    ButtonLogin, Container, ContainerLogin,
+    InputContainer, InputLogin
+} from "./styles";
+
+import Title from "@/components/Title";
+import Subtitle from "@/components/Subtitle";
+import Button from "@/components/Button";
 
 
 export default function Login() {
 
     return (
         <>
-            <ContainerHeader>
+            <Container>
 
                 <Title>Login</Title>
                 <Subtitle>Realize aqui o seu login</Subtitle>
@@ -29,6 +31,7 @@ export default function Login() {
                             placeholderTextColor="gray"
                             keyboardType="email-address"
                             underlineColorAndroid="transparent"
+                            scrollEnabled={false}
                         />
                     </InputContainer>
 
@@ -39,6 +42,7 @@ export default function Login() {
                             placeholderTextColor="gray"
                             underlineColorAndroid="transparent"
                             secureTextEntry={true}
+                            scrollEnabled={false}
                         />
                     </InputContainer>
 
@@ -47,8 +51,8 @@ export default function Login() {
                     </ButtonLogin>
 
                 </ContainerLogin>
-            </ContainerHeader>
 
+            </Container>
         </>
     );
 }
