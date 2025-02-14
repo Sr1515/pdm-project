@@ -5,15 +5,17 @@ import { ThemeProvider } from "styled-components";
 import { StatusBar } from "react-native"
 import { theme } from "@/theme";
 
-import Login from "@/screens/Login";
-import Home from "@/screens/Home";
-import Venda from "@/screens/Venda";
-import SignUp from "@/screens/SignUp";
-import Cliente from "@/screens/Cliente";
-import AddProduct from "@/screens/AddProduct";
-import MapCliente from "@/screens/MapCliente";
-import GerenciadorVendas from "@/screens/GerenciadorVendas";
-import AddClient from "@/screens/AddClient";
+import { ExpoRouter } from "expo-router";
+
+import Login from "@/app/login";
+import Venda from "@/app/venda";
+import SignUp from "@/app/signUp";
+import Cliente from "@/app/cliente";
+import AddProduct from "@/app/addProduct";
+import MapCliente from "@/app/mapCliente";
+import GerenciadorVendas from "@/app/gerenciadorVendas";
+import FooterMenu from "@/components/FooterMenu";
+import AddClient from "./addCliente";
 
 
 export default function App() {
