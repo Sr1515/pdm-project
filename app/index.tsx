@@ -16,6 +16,7 @@ import MapCliente from "@/app/mapCliente";
 import GerenciadorVendas from "@/app/gerenciadorVendas";
 import FooterMenu from "@/components/FooterMenu";
 import AddClient from "./addCliente";
+import Home from "./home";
 
 
 export default function App() {
@@ -29,7 +30,7 @@ export default function App() {
       />
 
       <ThemeProvider theme={theme}>
-        <AddClient />
+        <Login />
       </ThemeProvider>
 
     </>

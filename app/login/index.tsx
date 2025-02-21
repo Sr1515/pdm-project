@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import 'react-native-reanimated';
 
 import Ionicons from "@expo/vector-icons/Ionicons"
@@ -8,9 +8,25 @@ import Subtitle from "@/components/Subtitle";
 import Button from "@/components/Button";
 import { ButtonLogin, Container, ContainerLogin, InputContainer, InputLogin } from "./styles";
 
+import { useAuth } from "@/hooks/useAuth";
 import Config from "@/components/Config";
 
+import { router } from "expo-router";
+
+const { login } = useAuth();
+
 function Login() {
+
+    const [email, setEmail] = useState<string>('')
+    const [password, setPassword] = useState<string>('')
+
+    async function handleLogin() {
+
+        await login(email, password)
+
+        router.replace('/home')
+
+    }
 
     return (
         <Config>
@@ -22,6 +38,7 @@ function Login() {
 
                 <ContainerLogin>
 
+
                     <InputContainer>
                         <Ionicons name="person-outline" size={25} color={"gray"} />
                         <InputLogin
@@ -30,6 +47,7 @@ function Login() {
                             keyboardType="email-address"
                             underlineColorAndroid="transparent"
                             scrollEnabled={false}
+                            onChange={(event) => { setEmail(event.target.value) }}
                         />
                     </InputContainer>
 
@@ -41,10 +59,12 @@ function Login() {
                             underlineColorAndroid="transparent"
                             secureTextEntry={true}
                             scrollEnabled={false}
+                            onChange={(event) => { setPassword(event.target.value) }}
                         />
                     </InputContainer>
 
-                    <ButtonLogin>
+
+                    <ButtonLogin onPress={handleLogin}>
                         <Button>Login</Button>
                     </ButtonLogin>
 
