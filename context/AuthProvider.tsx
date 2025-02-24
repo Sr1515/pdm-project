@@ -46,7 +46,6 @@ export function AuthProviderContext({ children }: IProps) {
         setTokenState(null);
         await AsyncStorage.removeItem('token');
         axios.defaults.headers.common.Authorization = '';
-        console.log('removeu')
         router.replace('/login');
     }
 

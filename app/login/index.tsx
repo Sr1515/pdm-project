@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import Title from "@/components/Title";
-import Subtitle from "@/components/Subtitle";
-import Button from "@/components/Button";
-import { ButtonLogin, Container, ContainerLogin, InputContainer, InputLogin } from "./styles";
+import React from "react";
+import { Controller, useForm, useWatch } from "react-hook-form";
+import { ButtonLogin, Container, ContainerLogin, InputContainer, InputLogin, ErrorText } from "./styles";
 import { useAuth } from "@/hooks/useAuth";
 import Config from "@/components/Config";
 import { router } from "expo-router";
 import { Text } from "@rneui/base";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import Button from "@/components/Button";
+import Title from "@/components/Title";
+import Subtitle from "@/components/Subtitle";
 
 function Login() {
     const { control, handleSubmit, formState: { errors } } = useForm({
@@ -29,15 +29,21 @@ function Login() {
         }
     };
 
+    const emailValue = useWatch({ control, name: 'email' });
+    const passwordValue = useWatch({ control, name: 'password' });
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isEmailValid = emailRegex.test(emailValue);
+    const isPasswordValid = passwordValue?.length >= 4;
+
     return (
         <Config>
-
             <Container>
                 <Title>Login</Title>
                 <Subtitle>Realize aqui o seu login</Subtitle>
 
                 <ContainerLogin>
-                    <InputContainer>
+                    <InputContainer hasError={!!errors.email} isValid={isEmailValid}>
                         <Ionicons name="person-outline" size={25} color={"gray"} />
                         <Controller
                             control={control}
@@ -45,7 +51,7 @@ function Login() {
                             rules={{
                                 required: "Email é obrigatório",
                                 // pattern: {
-                                //     value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                //     value: emailRegex,
                                 //     message: "Formato de email inválido",
                                 // },
                             }}
@@ -54,16 +60,15 @@ function Login() {
                                     placeholder="Email"
                                     placeholderTextColor="gray"
                                     keyboardType="email-address"
-                                    underlineColorAndroid="transparent"
                                     value={value}
                                     onChangeText={onChange}
                                 />
                             )}
                         />
-                        {errors.email && <Text style={{ color: 'red', fontSize: 12 }}>{errors.email.message}</Text>}
+                        {errors.email && <ErrorText>{errors.email.message}</ErrorText>}
                     </InputContainer>
 
-                    <InputContainer>
+                    <InputContainer hasError={!!errors.password} isValid={isPasswordValid}>
                         <Ionicons name="lock-closed-outline" size={25} color={"gray"} />
                         <Controller
                             control={control}
@@ -71,7 +76,7 @@ function Login() {
                             rules={{
                                 required: "Senha é obrigatória",
                                 minLength: {
-                                    value: 2,
+                                    value: 3,
                                     message: "A senha deve ter no mínimo 6 caracteres",
                                 },
                             }}
@@ -80,13 +85,12 @@ function Login() {
                                     placeholder="Senha"
                                     placeholderTextColor="gray"
                                     secureTextEntry={true}
-                                    underlineColorAndroid="transparent"
                                     value={value}
                                     onChangeText={onChange}
                                 />
                             )}
                         />
-                        {errors.password && <Text style={{ color: 'red', fontSize: 12 }}>{errors.password.message}</Text>}
+                        {errors.password && <ErrorText>{errors.password.message}</ErrorText>}
                     </InputContainer>
 
                     <ButtonLogin>
