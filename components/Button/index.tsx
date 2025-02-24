@@ -3,12 +3,13 @@ import { DefaultButton, TextButton } from "./styles";
 
 type IButton = {
     children: React.ReactNode;
+    onPress: () => void;
 };
 
-export default function Button({ children }: IButton) {
+export default function Button({ children, onPress }: IButton) {
     return (
-        <DefaultButton>
+        <DefaultButton onPress={onPress}>
             <TextButton>{children}</TextButton>
-        </DefaultButton >
+        </DefaultButton>
     );
 }

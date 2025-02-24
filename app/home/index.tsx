@@ -24,7 +24,6 @@ import Button from "@/components/Button";
 import Config from "@/components/Config";
 
 import { useState, useEffect } from "react";
-import { AuthSupplier } from "@/context/AuthProvider";
 
 
 function Home() {
@@ -37,72 +36,69 @@ function Home() {
 
   return (
     <Config>
-      <AuthSupplier>
 
-        <Container>
+      <Container>
 
-          <Title>Storage.io</Title>
+        <Title>Storage.io</Title>
 
-          <Form>
+        <Form>
 
-            <Input
-              placeholder="Pesquise produtos por nome ou categoria"
-              placeholderTextColor="#6B6B6B"
-            />
-
-            <ButtonSearch>
-              <Ionicons name="search-outline" size={32} color={"black"} />
-            </ButtonSearch>
-
-          </Form>
-
-          <Button>Novo item</Button>
-
-          <FlatList
-
-            data={products}
-            keyExtractor={item => item.id.toString()}
-            showsVerticalScrollIndicator={false}
-            ListEmptyComponent={() => (
-              <ListEmptyText>
-                Nenhum produto foi adicionado ainda. Adicione um!
-              </ListEmptyText>
-            )}
-            renderItem={({ item }) => (
-
-              <ProductItem>
-
-                <ProductImage source={{ uri: item.image }} />
-
-                <ProductInfo>
-
-                  <ProductText>{item.name}</ProductText>
-                  <ProductDescription>{item.description}</ProductDescription>
-                  <ProductPrice>{item.price}</ProductPrice>
-
-                </ProductInfo>
-
-                <ButtonContainer>
-
-                  <ButtonItemActionEdit>
-                    <Ionicons name="pencil-outline" size={25} color={"white"} />
-                  </ButtonItemActionEdit>
-
-                  <ButtonItemActionRemove>
-                    <Ionicons name="trash-bin-outline" size={25} color={"white"} />
-                  </ButtonItemActionRemove>
-
-                </ButtonContainer>
-
-              </ProductItem>
-
-            )}
+          <Input
+            placeholder="Pesquise produtos por nome ou categoria"
+            placeholderTextColor="#6B6B6B"
           />
 
-        </Container>
-        <FooterMenu />
-      </AuthSupplier>
+          <ButtonSearch>
+            <Ionicons name="search-outline" size={32} color={"black"} />
+          </ButtonSearch>
 
+        </Form>
+
+        {/* <Button onPress={ handleDeleteProduct }>Novo item</Button> */}
+
+        <FlatList
+
+          data={products}
+          keyExtractor={item => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={() => (
+            <ListEmptyText>
+              Nenhum produto foi adicionado ainda. Adicione um!
+            </ListEmptyText>
+          )}
+          renderItem={({ item }) => (
+
+            <ProductItem>
+
+              <ProductImage source={{ uri: item.image }} />
+
+              <ProductInfo>
+
+                <ProductText>{item.name}</ProductText>
+                <ProductDescription>{item.description}</ProductDescription>
+                <ProductPrice>{item.price}</ProductPrice>
+
+              </ProductInfo>
+
+              <ButtonContainer>
+
+                <ButtonItemActionEdit>
+                  <Ionicons name="pencil-outline" size={25} color={"white"} />
+                </ButtonItemActionEdit>
+
+                <ButtonItemActionRemove>
+                  <Ionicons name="trash-bin-outline" size={25} color={"white"} />
+                </ButtonItemActionRemove>
+
+              </ButtonContainer>
+
+            </ProductItem>
+
+          )}
+        />
+
+      </Container>
+      <FooterMenu />
     </Config>
   );
 }

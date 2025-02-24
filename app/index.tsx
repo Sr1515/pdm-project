@@ -17,6 +17,7 @@ import GerenciadorVendas from "@/app/gerenciadorVendas";
 import FooterMenu from "@/components/FooterMenu";
 import AddClient from "./addCliente";
 import Home from "./home";
+import { AuthProviderContext } from "@/context/AuthProvider";
 
 
 export default function App() {
@@ -30,7 +31,9 @@ export default function App() {
       />
 
       <ThemeProvider theme={theme}>
-        <Login />
+        <AuthProviderContext>
+          <Login />
+        </AuthProviderContext>
       </ThemeProvider>
 
     </>
