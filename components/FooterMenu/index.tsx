@@ -9,7 +9,11 @@ export default function FooterMenu() {
     const { logout } = useAuth();
 
     const handleLogout = async () => {
-        await logout();
+        try {
+            await logout();
+        } catch (error) {
+            console.error('Erro ao fazer logout:', error); // Log para depuração
+        }
     };
 
     return (
