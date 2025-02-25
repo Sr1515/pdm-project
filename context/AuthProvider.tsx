@@ -19,71 +19,60 @@ interface IProps {
 export function AuthProviderContext({ children }: IProps) {
     const [tokenState, setTokenState] = useState<string | null>(null);
 
-    // Função para fazer login
     async function login(email: string, password: string) {
         const dados = { email, password };
+
         try {
             const response = await axios.post('http://192.168.2.101:3000/auth', dados);
+
+            console.log(response.data)
 
             if (response.data.error) {
                 throw new Error('Credenciais inválidas');
             }
 
             const { token } = response.data as { token: string, name: string };
-
-            // Configura o cabeçalho de autenticação
             axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 
-            // Salva o token no AsyncStorage
             await AsyncStorage.setItem('token', token);
-            console.log('Token salvo no AsyncStorage:', token); // Log para depuração
+            console.log('Token salvo no AsyncStorage:', token);
 
-            // Atualiza o estado do token
             setTokenState(token);
-
-            // Redireciona para a tela inicial após o login
             router.replace('/home');
 
         } catch (error) {
-            console.error('Erro ao fazer login:', error); // Log para depuração
-            throw new Error('Erro ao tentar fazer login. Verifique suas credenciais.');
+            console.error('Erro ao fazer login:', error);
+            throw error;
         }
     }
 
-    // Função para fazer logout
     async function logout() {
         try {
-            // Remove o token do estado e do AsyncStorage
             setTokenState(null);
             await AsyncStorage.removeItem('token');
-            console.log('Token removido do AsyncStorage'); // Log para depuração
 
-            // Remove o cabeçalho de autenticação
-            axios.defaults.headers.common.Authorization = '';
+            console.log('Token removido do AsyncStorage');
 
-            // Redireciona para a tela de login
+            axios.defaults.headers.common.Authorization = null;
             router.replace('/login');
+
         } catch (error) {
-            console.error('Erro ao fazer logout:', error); // Log para depuração
+            console.error('Erro ao fazer logout:', error);
         }
     }
 
-    // Verifica se há um token salvo ao carregar o aplicativo
     useEffect(() => {
         (async () => {
             try {
                 const tokenStorage = await AsyncStorage.getItem('token');
-                console.log('Token recuperado do AsyncStorage:', tokenStorage); // Log para depuração
+                console.log('Token recuperado do AsyncStorage:', tokenStorage);
 
                 if (tokenStorage) {
-                    // Configura o cabeçalho de autenticação
                     axios.defaults.headers.common.Authorization = `Bearer ${tokenStorage}`;
-
-                    // Atualiza o estado do token
                     setTokenState(tokenStorage);
                 }
             } catch (error) {
-                console.error('Erro ao recuperar o token do AsyncStorage:', error); // Log para depuração
+                console.error('Erro ao recuperar o token do AsyncStorage:', error);
             }
         })();
     }, []);

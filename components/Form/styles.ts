@@ -4,20 +4,6 @@ import styled from "styled-components/native";
 const errorColor = 'red';
 const successColor = 'green';
 
-export const Container = styled.View`
-  flex: 1;
-  background-color: ${props => props.theme.colors.background}; 
-  padding: 24px;
-`;
-
-export const ContainerLogin = styled.SafeAreaView`
-  flex: 1;
-  background-color: ${props => theme.colors.background};
-  justify-content: space-evenly;
-  gap: 0px;
-  align-items: center;
-`;
-
 export const InputContainer = styled.View<{ hasError?: boolean; isValid?: boolean }>`
   flex-direction: row;
   align-items: center;
@@ -44,11 +30,3 @@ export const ErrorText = styled.Text`
   margin-top: 5px;
   margin-left: 10px;
 `;
-
-// export const ButtonLogin = styled.TouchableOpacity`
-//   width: 86%;
-//   height: 50px;
-//   justify-content: center;
-//   align-items: center;
-//   border-radius: 5px;
-// `;

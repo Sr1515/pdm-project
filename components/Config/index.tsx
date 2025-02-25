@@ -17,10 +17,9 @@ export default function Config({ children }: IConfig) {
         />
 
         <ThemeProvider theme={theme}>
-            <AuthProviderContext>
-                {children}
-            </AuthProviderContext>
+            {children}
         </ThemeProvider>
+
     </>
 
 }

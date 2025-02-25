@@ -1,9 +1,10 @@
 import React from "react";
 import { Container, MenuItem, MenuText } from "./style";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useAuth } from "@/hooks/useAuth"; // Importa o hook para acessar o contexto
-import { Link, router } from "expo-router"; // Importa o router para navegar
-import { StatusBar } from "react-native";
+import { useAuth } from "@/hooks/useAuth";
+import { StatusBar, TouchableOpacity } from "react-native";
+import { Link } from "expo-router";
+import Config from "../Config";
 
 export default function FooterMenu() {
     const { logout } = useAuth();
@@ -12,7 +13,7 @@ export default function FooterMenu() {
         try {
             await logout();
         } catch (error) {
-            console.error('Erro ao fazer logout:', error); // Log para depuração
+            console.error('Erro ao fazer logout:', error);
         }
     };
 
@@ -48,7 +49,9 @@ export default function FooterMenu() {
 
                 <MenuItem>
                     <Ionicons name="exit-outline" size={32} color={"white"} />
-                    <MenuText onPress={handleLogout}>Sair</MenuText>
+                    <TouchableOpacity onPress={handleLogout}>
+                        <MenuText>Sair</MenuText>
+                    </TouchableOpacity>
                 </MenuItem>
             </Container>
         </>
