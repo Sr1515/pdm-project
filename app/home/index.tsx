@@ -85,7 +85,7 @@ function Home() {
           <FlatList
 
             data={products}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={() => (
               <ListEmptyText>
@@ -94,21 +94,29 @@ function Home() {
             )}
 
             renderItem={({ item }) => (
+
               <ProductItem>
+
                 <ProductImage source={{ uri: item.image }} />
+
                 <ProductInfo>
                   <ProductText>{item.name}</ProductText>
                   <ProductDescription>{item.description}</ProductDescription>
                   <ProductPrice>{item.price}</ProductPrice>
                 </ProductInfo>
+
                 <ButtonContainer>
+
                   <ButtonItemActionEdit>
                     <Ionicons name="pencil-outline" size={25} color={"white"} />
                   </ButtonItemActionEdit>
+
                   <ButtonItemActionRemove>
                     <Ionicons name="trash-bin-outline" size={25} color={"white"} />
                   </ButtonItemActionRemove>
+
                 </ButtonContainer>
+
               </ProductItem>
             )}
           />
