@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import 'react-native-reanimated';
-import { FlatList } from "react-native"
+import { FlatList, Alert } from "react-native";
 
-import Ionicons from "@expo/vector-icons/Ionicons"
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 import {
     ActionsContainer, Container, EmptyText,
@@ -13,78 +13,129 @@ import {
 import FooterMenu from "@/components/FooterMenu";
 import Title from "@/components/Title";
 import Config from "@/components/Config";
-
-const mockProductsSell = [
-    { id: 1, name: 'cafe', client: 'Samuel' },
-    { id: 2, name: 'arroz', client: 'Samuel' },
-    { id: 3, name: 'cusuz', client: 'Joao' },
-    { id: 4, name: 'cafe', client: 'Joao' },
-    { id: 5, name: 'cafe', client: 'Jose' },
-    { id: 6, name: 'cafe', client: 'Samuel' },
-    { id: 7, name: 'cafe', client: 'Samuel' },
-    { id: 8, name: 'cafe', client: 'Joao' },
-    { id: 9, name: 'cafe', client: 'Joao' },
-    { id: 10, name: 'cafe', client: 'Jose' },
-    { id: 11, name: 'cafe', client: 'Samuel' },
-    { id: 12, name: 'cafe', client: 'Samuel' },
-    { id: 13, name: 'cafe', client: 'Joao' },
-    { id: 14, name: 'cafe', client: 'Joao' },
-    { id: 15, name: 'cafe', client: 'Jose' },
-];
+import { AuthContext } from "@/context/AuthProvider";
+import { api } from "@/api/axios";
+import { ListEmptyText } from "../home/styles";
 
 function Venda() {
+    const { tokenState } = useContext(AuthContext);
+
+    const [vendas, setVendas] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchVendas = async () => {
+        if (!tokenState) {
+            return;
+        }
+
+        try {
+            const response = await api.get("/supply", {
+                headers: {
+                    Authorization: `Bearer ${tokenState}`,
+                },
+            });
+            setVendas(response.data);
+            console.log("Vendas carregadas:", response.data);
+        } catch (error) {
+            console.error("Erro ao buscar as vendas:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleRemoveVenda = (vendaId: string) => {
+        Alert.alert(
+            "Confirmar Exclusão",
+            "Tem certeza de que deseja excluir esta venda?",
+            [
+                {
+                    text: "Cancelar",
+                    style: "cancel",
+                },
+                {
+                    text: "Excluir",
+                    onPress: async () => {
+                        if (!tokenState) {
+                            return;
+                        }
+
+                        try {
+                            console.log("Tentando remover a venda com o ID:", vendaId);
+
+
+                            const response = await api.delete(`/supply/${vendaId}`, {
+                                headers: {
+                                    Authorization: `Bearer ${tokenState}`,
+                                },
+                            });
+
+                            console.log("Resposta da exclusão:", response);
+
+                            setVendas((prevVendas) => prevVendas.filter((venda) => venda._id !== vendaId));
+                        } catch (error) {
+                            console.error("Erro ao remover a venda:", error);
+                        }
+                    },
+                },
+            ],
+            { cancelable: false }
+        );
+    };
+
+    useEffect(() => {
+        if (tokenState) {
+            fetchVendas();
+        }
+    }, [tokenState]);
 
     return (
         <Config>
             <Container>
-
                 <Title>Histórico de Vendas</Title>
 
                 <TableContainer>
-
                     <TableHeader>
                         <HeaderText>Cliente</HeaderText>
                         <HeaderText>Produtos Vendidos</HeaderText>
                         <HeaderText>Ações</HeaderText>
                     </TableHeader>
 
-                    <FlatList
+                    {loading ? (
+                        <ListEmptyText>Carregando...</ListEmptyText>
+                    ) : (
+                        <FlatList
+                            data={vendas}
+                            keyExtractor={(item) => item._id}
+                            showsVerticalScrollIndicator={false}
+                            ListEmptyComponent={() => (
+                                <ListEmptyText>
+                                    Nenhum produto foi adicionado ainda. Adicione um!
+                                </ListEmptyText>
+                            )}
+                            renderItem={({ item }) => (
+                                <TableRow>
+                                    <RowText>{item.person.name}</RowText>
+                                    <RowText>
+                                        {item.products.length > 0
+                                            ? `${[item.products[0].product.name + " " + item.products[1].product.name]}${item.products.length > 1 ? '...' : ''}`
+                                            : "Sem produtos"}
+                                    </RowText>
 
-                        data={mockProductsSell}
-                        keyExtractor={item => item.id.toString()}
-                        showsVerticalScrollIndicator={false}
-                        ListEmptyComponent={() => (
-                            <EmptyText>
-                                Não há histórico de vendas ainda!
-                            </EmptyText>
-                        )}
-
-                        renderItem={({ item }) => (
-
-                            <TableRow>
-
-                                <RowText>{item.client}</RowText>
-                                <RowText>{item.name}</RowText>
-
-                                <ActionsContainer>
-                                    <RemoveButton>
-                                        <Ionicons name="trash-bin-outline" size={15} color={"white"} />
-                                    </RemoveButton>
-                                </ActionsContainer>
-
-                            </TableRow>
-
-                        )}
-                    />
-
+                                    <ActionsContainer>
+                                        <RemoveButton onPress={() => handleRemoveVenda(item._id)}>
+                                            <Ionicons name="trash-bin-outline" size={15} color={"white"} />
+                                        </RemoveButton>
+                                    </ActionsContainer>
+                                </TableRow>
+                            )}
+                        />
+                    )}
                 </TableContainer>
-
             </Container>
 
             <FooterMenu />
         </Config>
     );
 }
-
 
 export default Venda;
