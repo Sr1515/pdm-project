@@ -40,7 +40,7 @@ function Home() {
     }
 
     try {
-      const response = await api.get("/product", {
+      const response = await api.get("/own-products", {
         headers: {
           Authorization: `Bearer ${tokenState}`
         }

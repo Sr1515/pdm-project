@@ -2,6 +2,7 @@ import { theme } from "@/theme";
 import styled from "styled-components/native";
 import MapView from 'react-native-maps';
 
+
 export const Container = styled.View`
   flex: 1;
   background-color: ${props => theme.colors.background};
@@ -13,6 +14,7 @@ export const StyledMapView = styled(MapView)`
   height: 70%;
 `;
 
+
 export const ButtonClientes = styled.View`
   flex: 1;
   width: 80%;
@@ -21,5 +23,5 @@ export const ButtonClientes = styled.View`
   justify-content: center;
   border-radius: 5px;
   margin-top: 20px; 
-  margin-left: 40px;
+  margin-left: 40px; 
 `;
