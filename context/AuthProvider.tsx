@@ -23,7 +23,7 @@ export function AuthProviderContext({ children }: IProps) {
         const dados = { email, password };
 
         try {
-            const response = await axios.post('http://192.168.2.101:3000/auth', dados);
+            const response = await axios.post('http://192.168.2.103:3000/auth', dados);
 
             console.log(response.data)
 

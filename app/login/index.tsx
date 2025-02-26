@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
-import { Container, ContainerLogin } from "./styles";
+import { Container, ContainerLogin, SignUpLink, Text, TextContainer } from "./styles";
 import { useAuth } from "@/hooks/useAuth";
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
 import Config from "@/components/Config";
 import Button from "@/components/Button";
 import Title from "@/components/Title";
 import Subtitle from "@/components/Subtitle";
 import { useForm, useWatch } from "react-hook-form";
 import FormInput from "@/components/Form";
-import axios from "axios";
+import { TouchableOpacity } from "react-native";
 
 let login: any;
 
@@ -24,13 +24,16 @@ function Login() {
 
     const onSubmit = async (data: any) => {
         try {
-            console.log(`AXIOS: ${axios.defaults.headers.common.Authorization}`)
+            console.log(data.email, data.password)
             await login(data.email, data.password);
             router.replace("/home");
         } catch (error) {
-            console.log(error)
-            // alert('Credenciais inválidas ou erro ao tentar fazer login.');
+            alert('Credenciais inválidas ou erro ao tentar fazer login.');
         }
+    };
+
+    const handleRedirect = () => {
+        router.replace('/signUp');
     };
 
     const emailValue = useWatch({ control, name: 'email' });
@@ -85,9 +88,18 @@ function Login() {
 
                     <Button onPress={handleSubmit(onSubmit)}>Login</Button>
 
+                    <TextContainer>
+                        <Text style={{ color: 'white', fontSize: 16 }}>Não tem uma conta?</Text>
+                        <TouchableOpacity onPress={handleRedirect}>
+                            <Text style={{ color: '#007bff', fontSize: 16 }}>
+                                Cadastre-se
+                            </Text>
+                        </TouchableOpacity>
+                    </TextContainer>
+
 
                 </ContainerLogin>
-            </Container>
+            </Container >
         </>
     );
 }

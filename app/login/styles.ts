@@ -1,5 +1,6 @@
 import { theme } from "@/theme";
 import styled from "styled-components/native";
+import { Link } from "expo-router";
 
 const errorColor = 'red';
 const successColor = 'green';
@@ -43,12 +44,27 @@ export const ErrorText = styled.Text`
   font-size: 12px;
   margin-top: 5px;
   margin-left: 10px;
+
+`;
+export const TextContainer = styled.View`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 `;
 
-// export const ButtonLogin = styled.TouchableOpacity`
-//   width: 86%;
-//   height: 50px;
-//   justify-content: center;
-//   align-items: center;
-//   border-radius: 5px;
-// `;
+export const Text = styled.Text`
+    font-size: 16px;
+    color: #333;
+`;
+
+export const SignUpLink = styled(Link)`
+    font-size: 16px;
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+`;

@@ -12,7 +12,7 @@ type FormInputProps = {
     rules: any;
     placeholder: string;
     icon: IconName;
-    isValid: boolean;
+    isValid?: boolean;
     errorMessage?: string;
     secureTextEntry?: boolean;
 };
