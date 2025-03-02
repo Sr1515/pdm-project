@@ -35,13 +35,11 @@ export function AuthProviderContext({ children }: IProps) {
             axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 
             await AsyncStorage.setItem('token', token);
-            console.log('Token salvo no AsyncStorage:', token);
 
             setTokenState(token);
             router.replace('/home');
 
         } catch (error) {
-            console.error('Erro ao fazer login:', error);
             throw error;
         }
     }
@@ -50,8 +48,6 @@ export function AuthProviderContext({ children }: IProps) {
         try {
             setTokenState(null);
             await AsyncStorage.removeItem('token');
-
-            console.log('Token removido do AsyncStorage');
 
             axios.defaults.headers.common.Authorization = null;
             router.replace('/login');

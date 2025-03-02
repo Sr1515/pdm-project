@@ -20,6 +20,7 @@ export const theme = ({
     primary: '#0a3180',
     secondary: '#05215A',
     accent: '#4262d5',
+    border: '#ddd'
   },
 });
 
