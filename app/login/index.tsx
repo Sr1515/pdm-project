@@ -49,7 +49,7 @@ function Login() {
 
     return (
         <Container>
-            <Title>Login</Title>
+            <Title>Entrar</Title>
             <Subtitle>Realize aqui o seu login</Subtitle>
 
             <ContainerLogin>
@@ -74,7 +74,7 @@ function Login() {
                     errors={errors}
                 />
 
-                <Button onPress={handleSubmit(onSubmit)}>Login</Button>
+                <Button onPress={handleSubmit(onSubmit)}>Entrar</Button>
 
                 <TextContainer>
                     <Text style={{ color: "white", fontSize: 16 }}>
@@ -86,7 +86,6 @@ function Login() {
                         </Text>
                     </TouchableOpacity>
                 </TextContainer>
-
             </ContainerLogin>
         </Container>
     );
