@@ -29,6 +29,8 @@ const AddProduct = () => {
     const isProductNameValid = productName?.length >= 3;
     const isManufactureDateValid = /^(\d{2})\/(\d{2})\/(\d{4})$/.test(manufactureDate || "");
     const isExpiryDateValid = /^(\d{2})\/(\d{2})\/(\d{4})$/.test(expiryDate || "");
+    const isProductTypeValid = productType?.length > 0;
+    const isDescriptionValid = description?.length > 0;
     const isQuantityValid = quantity && Number(quantity) > 0;
     const isValueValid = value && parseFloat(value) > 0;
 
@@ -48,11 +50,8 @@ const AddProduct = () => {
 
     return (
         <Config>
-
             <Container>
-
                 <Title>Adicionar Produto</Title>
-
                 <ScrollView>
                     <ContainerAddProduct>
                         <InputContainer>
@@ -63,7 +62,7 @@ const AddProduct = () => {
                                 placeholder="Digite o nome do produto"
                                 errorMessage={errors.productName?.message}
                                 errors={errors}
-                                isValid={productName?.length >= 3 && !errors.productName}
+                                isValid={isProductNameValid && !errors.productName}
                             />
                         </InputContainer>
 
@@ -99,7 +98,7 @@ const AddProduct = () => {
                                 placeholder="Digite o tipo do produto"
                                 errorMessage={errors.productType?.message}
                                 errors={errors}
-                                isValid={!errors.productType}
+                                isValid={isProductTypeValid && !errors.productType}
                             />
                         </InputContainer>
 
@@ -120,7 +119,7 @@ const AddProduct = () => {
                             <FormInput
                                 name="value"
                                 control={control}
-                                placeholder="R$ 0,00"
+                                placeholder="0.00"
                                 errorMessage={errors.value?.message}
                                 errors={errors}
                                 isValid={!!(isValueValid && !errors.value)}
@@ -135,7 +134,7 @@ const AddProduct = () => {
                                 placeholder="Digite a descrição do produto"
                                 errorMessage={errors.description?.message}
                                 errors={errors}
-                                isValid={!errors.description}
+                                isValid={isDescriptionValid && !errors.description}
                             />
                         </InputContainer>
 
@@ -145,11 +144,7 @@ const AddProduct = () => {
                         <Button onPress={handleSubmit(onSubmit)}>Adicionar Produto</Button>
                     </ContainerAddProduct>
                 </ScrollView>
-
-
-
             </Container>
-
             <FooterMenu />
         </Config>
     );

@@ -16,9 +16,11 @@ import Title from "@/components/Title";
 import Subtitle from "@/components/Subtitle";
 import Button from "@/components/Button";
 import Config from "@/components/Config";
+import { ButtonSearch } from "../cliente/style";
 
 
 function GerenciadorVendas() {
+
 
     return (
         <Config>
@@ -62,14 +64,14 @@ function GerenciadorVendas() {
 
                     </View>
 
-                    <ButtonAddFooter>
+                    {/* <ButtonAddFooter>
                         <Button>Adicionar Produto</Button>
                     </ButtonAddFooter>
 
                     <Container>
                         <Button>Realizar Venda</Button>
                         <Button>Histórico de Vendas</Button>
-                    </Container>
+                    </Container> */}
 
                 </Container>
             </ScrollView >

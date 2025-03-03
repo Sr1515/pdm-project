@@ -16,6 +16,9 @@ import Config from "@/components/Config";
 import { AuthContext } from "@/context/AuthProvider";
 import { api } from "@/api/axios";
 import { ListEmptyText } from "../home/styles";
+import { ButtonSearch } from "../cliente/style";
+import { router } from "expo-router";
+import Button from "@/components/Button";
 
 function Venda() {
     const { tokenState } = useContext(AuthContext);
@@ -82,6 +85,11 @@ function Venda() {
         );
     };
 
+    const handleNewVenda = () => {
+        router.replace('/gerenciadorVendas');
+    };
+
+
     useEffect(() => {
         if (tokenState) {
             fetchVendas();
@@ -94,6 +102,8 @@ function Venda() {
                 <Title>Histórico de Vendas</Title>
 
                 <TableContainer>
+                    <Button onPress={handleNewVenda}>Nova venda</Button>
+
                     <TableHeader>
                         <HeaderText>Cliente</HeaderText>
                         <HeaderText>Produtos Vendidos</HeaderText>

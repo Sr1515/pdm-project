@@ -20,7 +20,6 @@ const ImagePickerComponent: React.FC<ImagePickerComponentProps> = ({ onImagePick
         return validFormats.includes(`image/${fileExtension}`);
     };
 
-    // Função para pegar uma imagem da galeria
     const pickImage = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== "granted") {
@@ -40,7 +39,7 @@ const ImagePickerComponent: React.FC<ImagePickerComponentProps> = ({ onImagePick
             if (isValidImage(uri)) {
                 setImage(uri);
                 setImageError(null);
-                onImagePicked(uri); // Passa o URI da imagem para o componente pai
+                onImagePicked(uri);
             } else {
                 setImageError("Formato de imagem inválido. Apenas .png ou .jpeg são permitidos.");
                 Alert.alert("Erro", "Formato de imagem inválido. Apenas .png ou .jpeg são permitidos.");
@@ -48,7 +47,6 @@ const ImagePickerComponent: React.FC<ImagePickerComponentProps> = ({ onImagePick
         }
     };
 
-    // Função para tirar uma foto
     const takePhoto = async () => {
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
         if (status !== "granted") {
@@ -67,7 +65,7 @@ const ImagePickerComponent: React.FC<ImagePickerComponentProps> = ({ onImagePick
             if (isValidImage(uri)) {
                 setImage(uri);
                 setImageError(null);
-                onImagePicked(uri); // Passa o URI da imagem para o componente pai
+                onImagePicked(uri);
             } else {
                 setImageError("Formato de imagem inválido. Apenas .png ou .jpeg são permitidos.");
                 Alert.alert("Erro", "Formato de imagem inválido. Apenas .png ou .jpeg são permitidos.");
@@ -75,7 +73,6 @@ const ImagePickerComponent: React.FC<ImagePickerComponentProps> = ({ onImagePick
         }
     };
 
-    // Função para exibir o alert de escolha de galeria ou câmera
     const chooseImageSource = () => {
         Alert.alert(
             "Escolher Imagem",
