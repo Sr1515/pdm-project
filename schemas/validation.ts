@@ -31,5 +31,47 @@ export const signUpSchema = Z.object({
 });
 
 
+export const addProductSchema = Z.object({
+    productName: Z
+        .string()
+        .nonempty("Nome do produto é obrigatório"),
+
+    manufactureDate: Z
+        .string()
+        .regex(
+            /^(0[1-9]|1[0-9]|2[0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/,
+            "Data de fabricação inválida. Use o formato dd/mm/aaaa"
+        )
+        .nonempty("Data de fabricação é obrigatória"),
+
+    expiryDate: Z
+        .string()
+        .regex(
+            /^(0[1-9]|1[0-9]|2[0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/,
+            "Data de validade inválida. Use o formato dd/mm/aaaa"
+        )
+        .nonempty("Data de validade é obrigatória"),
+
+    productType: Z
+        .string()
+        .nonempty("Tipo do produto é obrigatório"),
+
+    quantity: Z
+        .string()
+        .regex(/^\d+$/, "A quantidade deve ser um número")
+        .nonempty("Quantidade é obrigatória"),
+
+    value: Z
+        .string()
+        .regex(/^\d+(\.\d{1,2})?$/, "O valor deve ser um número válido, por exemplo: 10.50")
+        .nonempty("Valor é obrigatório"),
+
+    description: Z
+        .string()
+        .nonempty("Descrição é obrigatória"),
+});
+
+
+
 
 

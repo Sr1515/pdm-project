@@ -1,151 +1,158 @@
-import React, { useState } from "react";
-import { StatusBar, Alert, ScrollView } from "react-native";
-
-import * as ImagePicker from "expo-image-picker";
-import { Ionicons } from "@expo/vector-icons";
-
-import {
-    AddImageButton,
-    AddImageButtonText,
-    Container,
-    ContainerAddProduct,
-    InputAddProduct,
-    InputContainer,
-    InputLabel,
-    ProductImage,
-    ProductImageContainer,
-} from "./styles";
-
-import Title from "@/components/Title";
+import React from "react";
+import { ScrollView, Alert } from "react-native";
+import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { addProductSchema } from "@/schemas/validation";
 import Button from "@/components/Button";
+import Title from "@/components/Title";
+import { Container, ContainerAddProduct, InputContainer, InputLabel } from "./styles";
+import ImagePickerComponent from "@/components/ImagePickerComponent";
+import FormInput from "@/components/Form";
 import FooterMenu from "@/components/FooterMenu";
 import Config from "@/components/Config";
 
+const AddProduct = () => {
+    const { control, handleSubmit, formState: { errors } } = useForm({
+        resolver: zodResolver(addProductSchema),
+    });
 
-function AddProduct() {
+    const productName = useWatch({ control, name: "productName" });
+    const manufactureDate = useWatch({ control, name: "manufactureDate" });
+    const expiryDate = useWatch({ control, name: "expiryDate" });
+    const productType = useWatch({ control, name: "productType" });
+    const quantity = useWatch({ control, name: "quantity" });
+    const value = useWatch({ control, name: "value" });
+    const description = useWatch({ control, name: "description" });
 
-    const [image, setImage] = useState<string | null>(null);
+    const [image, setImage] = React.useState<string | null>(null);
 
-    const pickImage = async () => {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== "granted") {
-            Alert.alert("Permissão necessária", "Precisamos de acesso à sua galeria para selecionar uma imagem.");
+    const isProductNameValid = productName?.length >= 3;
+    const isManufactureDateValid = /^(\d{2})\/(\d{2})\/(\d{4})$/.test(manufactureDate || "");
+    const isExpiryDateValid = /^(\d{2})\/(\d{2})\/(\d{4})$/.test(expiryDate || "");
+    const isQuantityValid = quantity && Number(quantity) > 0;
+    const isValueValid = value && parseFloat(value) > 0;
+
+    const onSubmit = (data: any) => {
+        if (!image) {
+            Alert.alert("Erro", "Você precisa adicionar uma imagem do produto.");
             return;
         }
 
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
+        console.log("Produto Adicionado:", data);
+        Alert.alert("Sucesso", "Produto adicionado com sucesso!");
+    };
 
-        if (!result.canceled) {
-            setImage(result.assets[0].uri);
-        }
+    const handleImagePicked = (uri: string) => {
+        setImage(uri);
     };
 
     return (
         <Config>
+
             <Container>
 
-                <Title>Adicionar produto</Title>
+                <Title>Adicionar Produto</Title>
 
                 <ScrollView>
-
                     <ContainerAddProduct>
-
                         <InputContainer>
                             <InputLabel>Nome do produto</InputLabel>
-                            <InputAddProduct
+                            <FormInput
+                                name="productName"
+                                control={control}
                                 placeholder="Digite o nome do produto"
-                                placeholderTextColor="gray"
-                                underlineColorAndroid="transparent"
+                                errorMessage={errors.productName?.message}
+                                errors={errors}
+                                isValid={productName?.length >= 3 && !errors.productName}
                             />
                         </InputContainer>
 
                         <InputContainer>
                             <InputLabel>Data de fabricação</InputLabel>
-                            <InputAddProduct
+                            <FormInput
+                                name="manufactureDate"
+                                control={control}
                                 placeholder="dd/mm/aaaa"
-                                placeholderTextColor="gray"
-                                underlineColorAndroid="transparent"
+                                errorMessage={errors.manufactureDate?.message}
+                                errors={errors}
+                                isValid={isManufactureDateValid && !errors.manufactureDate}
                             />
                         </InputContainer>
 
                         <InputContainer>
                             <InputLabel>Data de validade</InputLabel>
-                            <InputAddProduct
+                            <FormInput
+                                name="expiryDate"
+                                control={control}
                                 placeholder="dd/mm/aaaa"
-                                placeholderTextColor="gray"
-                                underlineColorAndroid="transparent"
+                                errorMessage={errors.expiryDate?.message}
+                                errors={errors}
+                                isValid={isExpiryDateValid && !errors.expiryDate}
                             />
                         </InputContainer>
 
                         <InputContainer>
                             <InputLabel>Tipo do produto</InputLabel>
-                            <InputAddProduct
+                            <FormInput
+                                name="productType"
+                                control={control}
                                 placeholder="Digite o tipo do produto"
-                                placeholderTextColor="gray"
-                                underlineColorAndroid="transparent"
+                                errorMessage={errors.productType?.message}
+                                errors={errors}
+                                isValid={!errors.productType}
                             />
                         </InputContainer>
 
                         <InputContainer>
                             <InputLabel>Quantidade</InputLabel>
-                            <InputAddProduct
+                            <FormInput
+                                name="quantity"
+                                control={control}
                                 placeholder="Digite a quantidade"
-                                placeholderTextColor="gray"
-                                keyboardType="numeric"
-                                underlineColorAndroid="transparent"
+                                errorMessage={errors.quantity?.message}
+                                errors={errors}
+                                isValid={!!(isQuantityValid && !errors.quantity)}
                             />
                         </InputContainer>
 
                         <InputContainer>
                             <InputLabel>Valor</InputLabel>
-                            <InputAddProduct
+                            <FormInput
+                                name="value"
+                                control={control}
                                 placeholder="R$ 0,00"
-                                placeholderTextColor="gray"
-                                keyboardType="numeric"
-                                underlineColorAndroid="transparent"
+                                errorMessage={errors.value?.message}
+                                errors={errors}
+                                isValid={!!(isValueValid && !errors.value)}
                             />
                         </InputContainer>
 
                         <InputContainer>
                             <InputLabel>Descrição</InputLabel>
-                            <InputAddProduct
+                            <FormInput
+                                name="description"
+                                control={control}
                                 placeholder="Digite a descrição do produto"
-                                placeholderTextColor="gray"
-                                multiline={true}
-                                underlineColorAndroid="transparent"
+                                errorMessage={errors.description?.message}
+                                errors={errors}
+                                isValid={!errors.description}
                             />
                         </InputContainer>
 
                         <InputLabel>Imagem do produto</InputLabel>
+                        <ImagePickerComponent onImagePicked={handleImagePicked} />
 
-                        <ProductImageContainer>
-                            {image && <ProductImage source={{ uri: image }} />}
-
-                            <AddImageButton onPress={pickImage}>
-
-                                <Ionicons name="camera" size={20} color="white" />
-                                <AddImageButtonText>Adicionar Imagem</AddImageButtonText>
-
-                            </AddImageButton>
-
-                            <Button>Adicionar produto</Button>
-                        </ProductImageContainer>
-
+                        <Button onPress={handleSubmit(onSubmit)}>Adicionar Produto</Button>
                     </ContainerAddProduct>
-
                 </ScrollView>
+
+
 
             </Container>
 
             <FooterMenu />
         </Config>
     );
-}
-
+};
 
 export default AddProduct;
