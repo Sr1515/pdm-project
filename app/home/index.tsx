@@ -10,7 +10,7 @@ import {
 } from "./styles";
 
 import {
-  ProductItem, ProductImage, ProductText,
+  ProductItem, ProductText,
   ListEmptyText, ProductDescription,
   ProductPrice, ProductInfo
 } from "./styles";
@@ -24,6 +24,7 @@ import { AuthContext } from "@/context/AuthProvider";
 import { router } from "expo-router";
 
 import { api } from '@/api/axios';
+import { ProductImageShow } from '@/components/ProductImage';
 
 
 function Home() {
@@ -160,14 +161,14 @@ function Home() {
             )}
 
             renderItem={({ item }) => (
-
               <ProductItem>
 
-                <ProductImage source={{ uri: item.image }} />
+                <ProductImageShow id={item._id} />
+
                 <ProductInfo>
                   <ProductText>{item.name}</ProductText>
                   <ProductDescription>{item.description}</ProductDescription>
-                  <ProductPrice>{item.price}</ProductPrice>
+                  <ProductPrice>{`R$: ${item.price} reais`}</ProductPrice>
 
                 </ProductInfo>
 

@@ -71,6 +71,44 @@ export const addProductSchema = Z.object({
         .nonempty("Descrição é obrigatória"),
 });
 
+export const addClientSchema = Z.object({
+    name: Z
+        .string()
+        .min(3, "O nome deve ter pelo menos 3 caracteres")
+        .nonempty("Nome é obrigatório"),
+
+    email: Z
+        .string()
+        .email("O e-mail precisa ser válido")
+        .nonempty("E-mail é obrigatório"),
+
+    contato: Z
+        .string()
+        .regex(
+            /^\+?[1-9]\d{1,14}$/,
+            "O número de contato precisa ser válido (formato internacional, ex: +5511999999999)"
+        )
+        .nonempty("Contato é obrigatório"),
+
+    tipoIdentificador: Z
+        .string()
+        .min(1, "Tipo de identificador é obrigatório")
+        .nonempty("Tipo de identificador é obrigatório"),
+
+    identificador: Z
+        .string()
+        .min(1, "Identificador é obrigatório")
+        .nonempty("Identificador é obrigatório"),
+
+    geolocation: Z
+        .string()
+        .regex(
+            /^-?\d{1,2}(\.\d+)?,-?\d{1,3}(\.\d+)?$/,
+            "Geolocalização inválida. Use o formato de coordenadas latitude,longitude"
+        )
+        .nonempty("Geolocalização é obrigatória")
+});
+
 
 
 

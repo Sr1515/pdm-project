@@ -63,12 +63,12 @@ export const ProductItem = styled.View`
   border-bottom-color:  ${props => props.theme.colors.text};;
 `;
 
-export const ProductImage = styled.Image`
-  width: 80px;
-  height: 80px;
-  margin-right: 10px;
-  border-radius: 50px;
-`;
+// export const ProductImage = styled.Image`
+//   width: 80px;
+//   height: 80px;
+//   margin-right: 10px;
+//   border-radius: 50px;
+// `;
 
 export const ProductInfo = styled.View`
   font-size: 11px;

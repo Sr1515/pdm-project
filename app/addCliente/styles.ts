@@ -41,7 +41,7 @@ export const InputLabel = styled.Text`
 
 export const MapContainer = styled.View`
   width: 100%;
-  height: 200px;
+  height: 400px;
   margin-top: 20px;
   border-radius: 10px;
   overflow: hidden;
