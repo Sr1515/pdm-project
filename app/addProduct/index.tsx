@@ -60,15 +60,6 @@ const AddProduct = () => {
     const isQuantityValid = quantity && Number(quantity) > 0;
     const isValueValid = value && parseFloat(value) > 0;
 
-    const convertImageToBase64 = async (uri: string) => {
-        try {
-            const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
-            return base64;
-        } catch (error) {
-            return null;
-        }
-    };
-
     const onSubmit = async (data: ProductData) => {
         setLoading(true);
 
@@ -117,10 +108,6 @@ const AddProduct = () => {
             if (productResponse.status === 201) {
 
                 if (image) {
-                    console.log(image)
-
-                    // const imageBase64 = await convertImageToBase64(image);
-
                     const data = new FormData();
 
                     data.append('file', {
@@ -275,6 +262,7 @@ const AddProduct = () => {
                         <Button onPress={handleSubmit(onSubmit)}>
                             {loading ? "Cadastrando..." : "Adicionar Produto"}
                         </Button>
+
                     </ContainerAddProduct>
                 </ScrollView>
             </Container>

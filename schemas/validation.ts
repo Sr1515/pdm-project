@@ -99,14 +99,6 @@ export const addClientSchema = Z.object({
         .string()
         .min(1, "Identificador é obrigatório")
         .nonempty("Identificador é obrigatório"),
-
-    geolocation: Z
-        .string()
-        .regex(
-            /^-?\d{1,2}(\.\d+)?,-?\d{1,3}(\.\d+)?$/,
-            "Geolocalização inválida. Use o formato de coordenadas latitude,longitude"
-        )
-        .nonempty("Geolocalização é obrigatória")
 });
 
 

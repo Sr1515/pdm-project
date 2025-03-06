@@ -11,25 +11,10 @@ interface IImage {
 
 export const ProductImageShow = ({ id }: IImage) => {
     const { tokenState } = useContext(AuthContext);
-    const [image, setImage] = useState("");
-
-    useEffect(() => {
-
-        (async () => {
-
-            api.get("/product-image/" + id, { headers: { Authorization: `Bearer ${tokenState}` }, responseType: 'arraybuffer' }).then(res => {
-                ; setImage(`data:${res.headers['content-type']};base64,${Buffer.from(String.fromCharCode(...new Uint8Array(res.data)), 'binary')
-                    .toString('base64')}`)
-            })
-
-        })()
-
-    }, [])
-
 
     return (
         <Container>
-            <Image source={{ uri: image }}>
+            <Image source={{ uri: "https://www.google.com/url?sa=i&url=https%3A%2F%2Ffreshorganicos.com.br%2Fp%2Fbatata-doce-organica-700g%2F&psig=AOvVaw2DKRkoxTnXQ_4qTi0hAy2y&ust=1741268812878000&source=images&cd=vfe&opi=89978449&ved=0CBAQjRxqFwoTCNDBxoWK84sDFQAAAAAdAAAAABAE" }} >
             </Image>
         </Container >
     )

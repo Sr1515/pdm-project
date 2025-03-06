@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { ScrollView } from "react-native";
-import MapView, { Marker, Region } from "react-native-maps";
 import {
     ButtonAddContainer, Container, ContainerAddClient, ContainerInput,
     InputLabel, MapContainer
@@ -11,14 +10,28 @@ import FooterMenu from "@/components/FooterMenu";
 import Config from "@/components/Config";
 import FormInput from "@/components/Form";
 import { useForm, useWatch } from "react-hook-form";
-import { addClientSchema } from "@/schemas/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { addClientSchema } from "@/schemas/validation";
+import { AuthContext } from "@/context/AuthProvider";
+import { api } from "@/api/axios";
+import { router } from "expo-router";
 import MapComponent from "@/components/Map";
 import Button from "@/components/Button";
 
+interface LocationType {
+    latitude: number;
+    longitude: number;
+    latitudeDelta: number;
+    longitudeDelta: number;
+}
+
 
 function AddClient() {
-    const { control, handleSubmit, formState: { errors } } = useForm({
+    const [loading, setLoading] = useState(false);
+    const { tokenState } = useContext(AuthContext);
+    const [geolocation, setGeolocation] = useState<LocationType | null>(null);
+
+    const { control, handleSubmit, formState: { errors }, setValue } = useForm({
         resolver: zodResolver(addClientSchema),
         defaultValues: {
             name: "",
@@ -26,7 +39,6 @@ function AddClient() {
             contato: "",
             tipoIdentificador: "",
             identificador: "",
-            geolocation: ""
         }
     });
 
@@ -41,6 +53,46 @@ function AddClient() {
     const isContatoValid = /^\+?[1-9]\d{1,14}$/.test(contato);
     const isTipoIdentificadorValid = tipoIdentificador?.length > 0;
     const isIdentificadorValid = identificador?.length > 0;
+
+    const onSubmit = async (data: any) => {
+        setLoading(true);
+
+        try {
+            console.log("Geolocalização selecionada:",);
+
+            const client = {
+                "name": data.name,
+                "email": data.email,
+                "contact": data.contato,
+                "register": {
+                    "type": data.tipoIdentificador,
+                    "value": data.identificador
+                },
+                "address": {
+                    "type": "Point",
+                    "coordinates": geolocation ? [geolocation.latitude, geolocation.longitude] : [],
+                },
+            };
+
+            const clientResponse = await api.post("/person", client, {
+                headers: {
+                    Authorization: `Bearer ${tokenState}`,
+                },
+            });
+
+            if (clientResponse.status === 201) {
+                alert("Cadastro bem-sucedido!");
+                router.replace("/cliente");
+            } else {
+                alert("Erro ao cadastrar, tente novamente.");
+            }
+        } catch (error) {
+            console.error("Erro ao tentar cadastrar:", error);
+            alert("Erro ao tentar cadastrar. Verifique seus dados e tente novamente.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <Config>
@@ -77,7 +129,7 @@ function AddClient() {
                             <FormInput
                                 name="contato"
                                 control={control}
-                                placeholder="Digite o email do cliente"
+                                placeholder="Digite o contato do cliente"
                                 errorMessage={errors.contato?.message}
                                 errors={errors}
                                 isValid={isContatoValid && !errors.contato ? true : false}
@@ -89,7 +141,7 @@ function AddClient() {
                             <FormInput
                                 name="tipoIdentificador"
                                 control={control}
-                                placeholder="Digite o email do cliente"
+                                placeholder="Digite o tipo de identificador"
                                 errorMessage={errors.tipoIdentificador?.message}
                                 errors={errors}
                                 isValid={isTipoIdentificadorValid && !errors.tipoIdentificador ? true : false}
@@ -101,7 +153,7 @@ function AddClient() {
                             <FormInput
                                 name="identificador"
                                 control={control}
-                                placeholder="Digite o email do cliente"
+                                placeholder="Digite o identificador"
                                 errorMessage={errors.identificador?.message}
                                 errors={errors}
                                 isValid={isIdentificadorValid && !errors.identificador ? true : false}
@@ -111,12 +163,17 @@ function AddClient() {
                         <InputLabel>Localização</InputLabel>
 
                         <MapContainer>
-                            <MapComponent />
+                            <MapComponent
+                                onGeolocationChange={(newGeolocation) => {
+                                    setGeolocation(newGeolocation);
+                                }}
+                            />
                         </MapContainer>
 
                         <ButtonAddContainer>
-                            <Button onPress={handleSubmit}>Criar</Button>
+                            <Button onPress={handleSubmit(onSubmit)}>{loading ? "Cadastrando..." : "Cadastrar"}</Button>
                         </ButtonAddContainer>
+
                     </ContainerAddClient>
                 </ScrollView>
             </Container>

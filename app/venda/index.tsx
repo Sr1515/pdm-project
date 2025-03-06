@@ -89,7 +89,6 @@ function Venda() {
         router.replace('/gerenciadorVendas');
     };
 
-
     useEffect(() => {
         if (tokenState) {
             fetchVendas();

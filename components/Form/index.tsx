@@ -9,7 +9,8 @@ import {
     successColor,
     focusedColor,
     inactiveColor
-} from "./styles"; // Importando estilos e cores
+} from "./styles";
+
 import { View } from "react-native";
 
 type IconName = keyof typeof Ionicons.glyphMap;
@@ -53,7 +54,7 @@ const FormInput: React.FC<FormInputProps> = ({
                                         ? focusedColor
                                         : inactiveColor
                         }
-                        style={{ position: "absolute", left: 10 }} /* Posicionando o ícone */
+                        style={{ position: "absolute", left: 10 }}
                     />
                 )}
                 <Controller

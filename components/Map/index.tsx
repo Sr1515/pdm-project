@@ -1,66 +1,95 @@
-import React, { useState } from "react";
-import { ScrollView, Button, Alert } from "react-native";
-import MapView, { Marker, Region } from "react-native-maps";
+import React, { useState, useEffect } from "react";
+import { View } from "react-native";
+import MapView, { Marker, Region, LatLng } from "react-native-maps";
 
-const MapComponent = () => {
-    const [region, setRegion] = useState<Region>({
+interface LocationType {
+    latitude: number;
+    longitude: number;
+    latitudeDelta: number;
+    longitudeDelta: number;
+}
+
+interface MapComponentProps {
+    onGeolocationChange: (geolocation: LocationType) => void;
+}
+
+const MapComponent: React.FC<MapComponentProps> = ({ onGeolocationChange }) => {
+    const [region, setRegion] = useState<LocationType>({
         latitude: -23.5505,
         longitude: -46.6333,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
     });
 
-    const [geolocation, setGeolocation] = useState<string>("");
+    const [markerPosition, setMarkerPosition] = useState<LatLng | null>(null);
 
-    // Função chamada quando o usuário clica no mapa
-    const handleMapPress = (event: any) => {
+    const handleMapPress = (event: { nativeEvent: { coordinate: LatLng } }) => {
         const { latitude, longitude } = event.nativeEvent.coordinate;
 
-        setRegion({
-            ...region,
+        const newRegion: LocationType = {
             latitude,
             longitude,
-        });
+            latitudeDelta: region.latitudeDelta,
+            longitudeDelta: region.longitudeDelta,
+        };
+        setRegion(newRegion);
 
-        setGeolocation(`${latitude},${longitude}`);
+        const newGeolocation: LocationType = {
+            latitude,
+            longitude,
+            latitudeDelta: region.latitudeDelta,
+            longitudeDelta: region.longitudeDelta,
+        };
+        setMarkerPosition({ latitude, longitude });
+
+        onGeolocationChange(newGeolocation);
     };
 
-    // Função chamada quando o usuário arrasta o marcador
-    const handleMarkerDragEnd = (event: any) => {
+    const handleMarkerDragEnd = (event: { nativeEvent: { coordinate: LatLng } }) => {
         const { latitude, longitude } = event.nativeEvent.coordinate;
 
-        setRegion({
-            ...region,
+        const newRegion: LocationType = {
             latitude,
             longitude,
-        });
+            latitudeDelta: region.latitudeDelta,
+            longitudeDelta: region.longitudeDelta,
+        };
+        setRegion(newRegion);
 
-        setGeolocation(`${latitude},${longitude}`);
+        const newGeolocation: LocationType = {
+            latitude,
+            longitude,
+            latitudeDelta: region.latitudeDelta,
+            longitudeDelta: region.longitudeDelta,
+        };
+        setMarkerPosition({ latitude, longitude });
+
+        onGeolocationChange(newGeolocation);
     };
+
+    useEffect(() => {
+        if (!markerPosition) {
+            setMarkerPosition({ latitude: region.latitude, longitude: region.longitude });
+        }
+    }, [region, markerPosition]);
 
     return (
-        <ScrollView contentContainerStyle={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
             <MapView
-                style={{ flex: 1, height: 400, marginTop: 20 }}
+                style={{ flex: 1, height: 400 }}
                 region={region}
                 onRegionChangeComplete={setRegion}
                 onPress={handleMapPress}
             >
-                <Marker
-                    coordinate={{
-                        latitude: region.latitude,
-                        longitude: region.longitude,
-                    }}
-                    draggable
-                    onDragEnd={handleMarkerDragEnd}
-                />
+                {markerPosition && (
+                    <Marker
+                        coordinate={markerPosition}
+                        draggable
+                        onDragEnd={handleMarkerDragEnd}
+                    />
+                )}
             </MapView>
-
-            <Button
-                title="Salvar Localização"
-                onPress={() => Alert.alert('Localização', `Latitude: ${geolocation.split(',')[0]}\nLongitude: ${geolocation.split(',')[1]}`)}
-            />
-        </ScrollView>
+        </View>
     );
 };
 

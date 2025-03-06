@@ -8,6 +8,7 @@ import Config from "@/components/Config";
 import * as Location from "expo-location";
 import { api } from "@/api/axios";
 import { AuthContext } from "@/context/AuthProvider";
+import { router } from "expo-router";
 
 interface LocationType {
     latitude: number;
@@ -67,7 +68,7 @@ function MapCliente() {
     }, [tokenState]);
 
     const handleAddCliente = () => {
-        console.log("Adicionando novo cliente...");
+        router.replace("/addCliente")
     };
 
     if (loading || !userLocation) {
@@ -79,14 +80,10 @@ function MapCliente() {
             <Container>
                 <Title>Encontre seus clientes</Title>
 
-                {/* Usando initialRegion para definir a região inicial do mapa */}
                 <StyledMapView initialRegion={userLocation}>
                     {clientes.map((client) => {
-                        const latitude = client.address.coordinates[1]; // Latitude
-                        const longitude = client.address.coordinates[0]; // Longitude
-
-                        // Verifique se as coordenadas estão sendo passadas corretamente
-                        console.log(`Client: ${client.name}, Lat: ${latitude}, Lon: ${longitude}`);
+                        const latitude = client.address.coordinates[1];
+                        const longitude = client.address.coordinates[0];
 
                         return (
                             <Marker
@@ -100,11 +97,13 @@ function MapCliente() {
                             />
                         );
                     })}
+
                 </StyledMapView>
 
                 <ButtonClientes>
                     <Button onPress={handleAddCliente}>Adicionar Cliente</Button>
                 </ButtonClientes>
+
             </Container>
 
             <FooterMenu />
