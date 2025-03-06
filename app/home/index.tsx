@@ -185,11 +185,9 @@ function Home() {
                   <ProductText>{item.name}</ProductText>
                   <ProductDescription>{item.description}</ProductDescription>
                   <ProductPrice>{`R$: ${item.price} reais`}</ProductPrice>
-
                 </ProductInfo>
 
                 <ButtonContainer>
-
                   <ButtonItemActionEdit>
                     <Ionicons name="pencil-outline" size={25} color={"white"} />
                   </ButtonItemActionEdit>
@@ -197,11 +195,11 @@ function Home() {
                   <ButtonItemActionRemove onPress={() => handleDeleteProduct(item._id)}>
                     <Ionicons name="trash-bin-outline" size={25} color={"white"} />
                   </ButtonItemActionRemove>
-
                 </ButtonContainer>
 
               </ProductItem>
             )}
+
           />
         )}
 

@@ -82,8 +82,14 @@ const AddProduct = () => {
             return;
         }
 
-        const price = parseFloat(data.value).toFixed(3);
+        const price = parseFloat(data.value);
         const ammount = parseInt(data.quantity, 10);
+
+        if (isNaN(price) || isNaN(ammount)) {
+            Alert.alert("Erro", "Por favor, insira valores válidos para preço e quantidade.");
+            setLoading(false);
+            return;
+        }
 
         try {
 
@@ -98,11 +104,13 @@ const AddProduct = () => {
                 "image": ""
             }
 
+
             const productResponse = await api.post("/product", productData, {
                 headers: {
                     Authorization: `Bearer ${tokenState}`,
                 },
             });
+
 
             if (productResponse.status === 201) {
 
@@ -116,7 +124,7 @@ const AddProduct = () => {
                         "uri": image
                     } as any)
 
-                    const imageResponse = await api.put(`/product/${productResponse.data.id}`, data, {
+                    const imageResponse = await api.patch(`/product/${productResponse.data.id}`, data, {
                         headers: {
                             "Content-Type": "multipart/form-data",
                             Authorization: `Bearer ${tokenState}`,
