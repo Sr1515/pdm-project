@@ -1,4 +1,3 @@
-import { theme } from "@/theme";
 import styled from "styled-components/native";
 
 export const Container = styled.View`
@@ -9,7 +8,7 @@ export const Container = styled.View`
 
 export const TableContainer = styled.View`
   flex: 1;
-  background-color: ${props => theme.colors.background};
+  background-color: ${props => props.theme.colors.background};
   width: 100%;
   padding-top: 10px;
 `;
@@ -30,21 +29,15 @@ export const TableHeader = styled.View`
   justify-content: space-between;
   gap: 40px;
   padding: 10px;
-  background-color: ${props => theme.colors.background};
+  background-color: ${props => props.theme.colors.background};
   border: 1px;
   border-radius: 5px;
-  border-color: ${props => theme.colors.text};
-`;
-
-export const ButtonText = styled.Text`
-  color: #fff;
-  font-size: 32px; 
-  text-align: center; 
+  border-color: ${props => props.theme.colors.text};
 `;
 
 export const HeaderText = styled.Text`
-  color: ${props => theme.colors.text};
-  font-size: 12px;
+  color: ${props => props.theme.colors.text};
+  font-size: ${props => props.theme.fontSizes.h4};
   font-weight: bold;
   flex: 1;
   text-align: center;
@@ -61,8 +54,8 @@ export const TableRow = styled.View`
 `;
 
 export const RowText = styled.Text`
-  color: gray;
-  font-size: 11px;
+  color: ${props => props.theme.colors.text};
+  font-size: ${props => props.theme.fontSizes.h5};
   flex: 1;
   text-align: center;
 `;
@@ -84,18 +77,18 @@ export const RemoveButton = styled.TouchableOpacity`
 export const EmptyText = styled.Text`
   text-align: center;
   margin-top: 20px;
-  font-size: 16px;
-  color: #666;
+  font-size: ${props => props.theme.fontSizes.h3};
+  color: ${props => props.theme.colors.text};
 `;
 
 export const Input = styled.TextInput`
   flex: 1; 
   height: 56px;
-  background-color: ${props => theme.colors.text};
+  background-color: ${props => props.theme.colors.text};
   border-radius: 5px;
-  color: ${props => theme.colors.background};
+  color: ${props => props.theme.colors.background};
   padding: 16px;
-  font-size: 16px;
+  font-size: ${props => props.theme.fontSizes.h3};
   margin-right: 12px;
 `;
 
@@ -103,7 +96,7 @@ export const ButtonSearch = styled.TouchableOpacity`
   width: 56px;  
   height: 56px;
   border-radius: 5px;
-  background-color: ${props => theme.colors.text};
+  background-color: ${props => props.theme.colors.text};
   align-items: center;
   justify-content: center;
 `;

@@ -5,7 +5,7 @@ import { FlatList, Alert } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 import {
-    ActionsContainer, Container, EmptyText,
+    ActionsContainer, Container,
     HeaderText, RemoveButton, RowText,
     TableContainer, TableHeader, TableRow
 } from "./style";
@@ -16,7 +16,6 @@ import Config from "@/components/Config";
 import { AuthContext } from "@/context/AuthProvider";
 import { api } from "@/api/axios";
 import { ListEmptyText } from "../home/styles";
-import { ButtonSearch } from "../cliente/style";
 import { router } from "expo-router";
 import Button from "@/components/Button";
 
@@ -27,18 +26,21 @@ function Venda() {
     const [loading, setLoading] = useState(true);
 
     const fetchVendas = async () => {
+
         if (!tokenState) {
             return;
         }
 
         try {
+
             const response = await api.get("/supply", {
                 headers: {
                     Authorization: `Bearer ${tokenState}`,
                 },
             });
+
             setVendas(response.data);
-            console.log("Vendas carregadas:", response.data);
+
         } catch (error) {
             console.error("Erro ao buscar as vendas:", error);
         } finally {
@@ -47,6 +49,7 @@ function Venda() {
     };
 
     const handleRemoveVenda = (vendaId: string) => {
+
         Alert.alert(
             "Confirmar Exclusão",
             "Tem certeza de que deseja excluir esta venda?",
@@ -57,14 +60,13 @@ function Venda() {
                 },
                 {
                     text: "Excluir",
+
                     onPress: async () => {
                         if (!tokenState) {
                             return;
                         }
 
                         try {
-                            console.log("Tentando remover a venda com o ID:", vendaId);
-
 
                             const response = await api.delete(`/supply/${vendaId}`, {
                                 headers: {
@@ -72,9 +74,8 @@ function Venda() {
                                 },
                             });
 
-                            console.log("Resposta da exclusão:", response);
-
                             setVendas((prevVendas) => prevVendas.filter((venda) => venda._id !== vendaId));
+
                         } catch (error) {
                             console.error("Erro ao remover a venda:", error);
                         }
@@ -97,16 +98,21 @@ function Venda() {
 
     return (
         <Config>
+
             <Container>
+
                 <Title>Histórico de Vendas</Title>
 
                 <TableContainer>
+
                     <Button onPress={handleNewVenda}>Nova venda</Button>
 
                     <TableHeader>
+
                         <HeaderText>Cliente</HeaderText>
                         <HeaderText>Produtos Vendidos</HeaderText>
                         <HeaderText>Ações</HeaderText>
+
                     </TableHeader>
 
                     {loading ? (
@@ -116,13 +122,17 @@ function Venda() {
                             data={vendas}
                             keyExtractor={(item) => item._id}
                             showsVerticalScrollIndicator={false}
+
                             ListEmptyComponent={() => (
                                 <ListEmptyText>
                                     Nenhum produto foi adicionado ainda. Adicione um!
                                 </ListEmptyText>
                             )}
+
                             renderItem={({ item }) => (
+
                                 <TableRow>
+
                                     <RowText>{item.person.name}</RowText>
                                     <RowText>
                                         {item.products.length > 0
@@ -131,18 +141,24 @@ function Venda() {
                                     </RowText>
 
                                     <ActionsContainer>
+
                                         <RemoveButton onPress={() => handleRemoveVenda(item._id)}>
                                             <Ionicons name="trash-bin-outline" size={15} color={"white"} />
                                         </RemoveButton>
+
                                     </ActionsContainer>
+
                                 </TableRow>
+
                             )}
                         />
                     )}
                 </TableContainer>
+
             </Container>
 
             <FooterMenu />
+
         </Config>
     );
 }

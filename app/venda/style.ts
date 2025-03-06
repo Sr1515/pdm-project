@@ -28,7 +28,7 @@ export const TableHeader = styled.View`
 
 export const HeaderText = styled.Text`
   color: ${props => theme.colors.text};
-  font-size: 12px;
+  font-size: ${props => props.theme.fontSizes.h4};
   font-weight: bold;
   flex: 1;
   text-align: center;
@@ -46,7 +46,7 @@ export const TableRow = styled.View`
 
 export const RowText = styled.Text`
   color: gray;
-  font-size: 11px;
+  font-size: ${props => props.theme.fontSizes.h5};
   flex: 1;
   text-align: center;
 `;
@@ -63,11 +63,4 @@ export const RemoveButton = styled.TouchableOpacity`
   padding: 8px;
   border-radius: 5px;
   margin-left: 10px;
-`;
-
-export const EmptyText = styled.Text`
-  text-align: center;
-  margin-top: 20px;
-  font-size: 16px;
-  color: #666;
 `;

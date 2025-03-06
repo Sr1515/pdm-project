@@ -8,10 +8,10 @@ export const theme = ({
   },
   fontSizes: {
     h1: '30',
-    h2: '14',
-    h3: '9',
-    h4: '8',
-    h5: '7',
+    h2: '18',
+    h3: '16',
+    h4: '13',
+    h5: '11',
     small: '6',
   },
   colors: {

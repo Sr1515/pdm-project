@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import 'react-native-reanimated';
 import { api } from "@/api/axios";
-import { ButtonSignUp, Container, ContainerSignUp, Text, TextContainer } from "./style";
+import { ButtonSignUp, Container, ContainerSignUp, Text, TextAbout, TextContainer, TextRedirect } from "./style";
 import Subtitle from "@/components/Subtitle";
 import Title from "@/components/Title";
 import Button from "@/components/Button";
@@ -54,9 +54,11 @@ function SignUp() {
             if (response.status === 201) {
                 alert("Cadastro bem-sucedido!");
                 router.replace("/login");
+
             } else {
                 alert("Erro ao cadastrar, tente novamente.");
             }
+
         } catch (error) {
             alert("Erro ao tentar cadastrar. Verifique seus dados e tente novamente.");
         } finally {
@@ -65,11 +67,14 @@ function SignUp() {
     };
 
     useEffect(() => {
+
         const getLocation = async () => {
             const { status } = await Location.requestForegroundPermissionsAsync();
+
             if (status === 'granted') {
                 const loc = await Location.getCurrentPositionAsync({});
                 setLocation(loc);
+
             } else {
                 alert("Permissão de localização negada");
             }
@@ -84,11 +89,14 @@ function SignUp() {
 
     return (
         <Config>
+
             <Container>
+
                 <Title>Registre sua conta</Title>
                 <Subtitle>Crie aqui sua conta</Subtitle>
 
                 <ContainerSignUp>
+
                     <FormInput
                         name="name"
                         control={control}
@@ -125,16 +133,25 @@ function SignUp() {
                     </ButtonSignUp>
 
                     <TextContainer>
-                        <Text style={{ color: 'white', fontSize: 16 }}>Já possui uma conta?</Text>
+
+                        <TextAbout>
+                            Já possui uma conta?
+                        </TextAbout>
+
                         <TouchableOpacity onPress={handleRedirect}>
-                            <Text style={{ color: '#007bff', fontSize: 16 }}>
+
+                            <TextRedirect>
                                 Entrar
-                            </Text>
+                            </TextRedirect>
+
                         </TouchableOpacity>
+
                     </TextContainer>
 
                 </ContainerSignUp>
+
             </Container>
+
         </Config >
     );
 }

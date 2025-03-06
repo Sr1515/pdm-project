@@ -31,7 +31,7 @@ export const AddImageButton = styled.TouchableOpacity`
 `;
 
 export const AddImageButtonText = styled.Text`
-  font-size: 16px;
+  font-size: ${props => props.theme.fontSizes.h3};
   color: ${props => props.theme.colors.text};
   font-weight: bold;
 `;

@@ -1,6 +1,5 @@
 import Z from 'zod'
 
-
 export const loginSchema = Z.object({
     email: Z
         .string()
@@ -12,7 +11,6 @@ export const loginSchema = Z.object({
         .min(6, "A senha deve ter no minimo 6 caracteres")
         .nonempty("A senha é obrigatória")
 });
-
 
 export const signUpSchema = Z.object({
     name: Z
@@ -29,7 +27,6 @@ export const signUpSchema = Z.object({
         .min(6, "A senha deve ter no mínimo 6 caracteres")
         .nonempty("A senha é obrigatória"),
 });
-
 
 export const addProductSchema = Z.object({
     productName: Z
@@ -100,7 +97,6 @@ export const addClientSchema = Z.object({
         .min(1, "Identificador é obrigatório")
         .nonempty("Identificador é obrigatório"),
 });
-
 
 
 

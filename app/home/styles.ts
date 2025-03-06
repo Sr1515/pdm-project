@@ -26,18 +26,6 @@ export const ButtonSearch = styled.TouchableOpacity`
   justify-content: center;
 `;
 
-export const ButtonAdd = styled.TouchableOpacity`
-  width: 100%;
-  height: 56px;
-  border-radius: 5px;
-  margin-bottom: 20px;
-  background-color: ${props => props.theme.colors.accent};
-  align-items: center;
-  justify-content: center;
-  border-bottom-width: 6px; 
-  border-bottom-color: ${props => props.theme.colors.primary};
-`;
-
 export const Form = styled.View`
   width: 100%;
   display: flex;
@@ -46,7 +34,6 @@ export const Form = styled.View`
   margin-bottom: 20px;
   justify-content: space-between;
 `;
-
 
 export const ProductItem = styled.View`
   flex: 1;
@@ -63,26 +50,17 @@ export const ProductItem = styled.View`
   border-bottom-color:  ${props => props.theme.colors.text};;
 `;
 
-// export const ProductImage = styled.Image`
-//   width: 80px;
-//   height: 80px;
-//   margin-right: 10px;
-//   border-radius: 50px;
-// `;
-
 export const ProductInfo = styled.View`
   font-size: 11px;
   flex: 1; 
   padding-left: 15px; 
 `;
 
-
 export const ProductText = styled.Text`
   font-size: 12px;
   font-weight: bold;
   color: ${props => props.theme.colors.text}
 `;
-
 
 export const ProductDescription = styled.Text`
   font-size: 11px;

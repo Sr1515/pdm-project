@@ -2,7 +2,6 @@ import React from "react";
 import { View, ViewBase } from "react-native";
 import styled from "styled-components/native";
 
-
 export const Container = styled(View)`
   width: 80px;
   height: 80px;

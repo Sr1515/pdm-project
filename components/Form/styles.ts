@@ -39,12 +39,12 @@ export const InputLogin = styled(TextInput).attrs<{
           ? focusedColor
           : inactiveColor};
   color: ${(props) => (props.isFocused ? "white" : "gray")};
-  font-size: 16px;
+  font-size: ${props => props.theme.fontSizes.h3}
 `;
 
 export const ErrorText = styled.Text`
   color: ${errorColor};
-  font-size: 12px;
+  font-size: ${props => props.theme.fontSizes.h3};
   margin-top: 5px;
   margin-left: 10px;
 `;

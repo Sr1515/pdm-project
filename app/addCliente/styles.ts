@@ -22,17 +22,8 @@ export const ContainerInput = styled.View`
   margin-bottom: 10px; 
 `;
 
-export const InputAddClient = styled.TextInput`
-  width: 100%;  
-  color: gray;
-  font-size: 16px;
-  border-bottom-width: 1px; 
-  border-bottom-color: gray; 
-  background-color: transparent; 
-`;
-
 export const InputLabel = styled.Text`
-  font-size: 14px;
+  font-size: ${props => props.theme.fontSizes.h4};
   justify-content: start;
   color: gray;
   font-weight: bold;
@@ -55,5 +46,3 @@ export const ButtonAddContainer = styled.TouchableOpacity`
   border-radius: 8px;
   margin-top: 20px;
 `;
-
-export default { Container, }

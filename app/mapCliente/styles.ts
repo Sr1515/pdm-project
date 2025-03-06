@@ -14,7 +14,6 @@ export const StyledMapView = styled(MapView)`
   height: 70%;
 `;
 
-
 export const ButtonClientes = styled.View`
   flex: 1;
   width: 80%;

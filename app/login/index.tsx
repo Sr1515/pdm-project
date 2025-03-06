@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, ContainerLogin, TextContainer, Text } from "./styles";
+import { Container, ContainerLogin, TextContainer, TextAbout, TextRedirect } from "./styles";
 import { useAuth } from "@/hooks/useAuth";
 import { router } from "expo-router";
 import Button from "@/components/Button";
@@ -49,10 +49,12 @@ function Login() {
 
     return (
         <Container>
+
             <Title>Entrar</Title>
             <Subtitle>Realize aqui o seu login</Subtitle>
 
             <ContainerLogin>
+
                 <FormInput
                     name="email"
                     control={control}
@@ -77,16 +79,21 @@ function Login() {
                 <Button onPress={handleSubmit(onSubmit)}>Entrar</Button>
 
                 <TextContainer>
-                    <Text style={{ color: "white", fontSize: 16 }}>
+
+                    <TextAbout>
                         Não tem uma conta?
-                    </Text>
+                    </TextAbout>
+
                     <TouchableOpacity onPress={handleRedirect}>
-                        <Text style={{ color: "#007bff", fontSize: 16 }}>
+                        <TextRedirect>
                             Cadastre-se
-                        </Text>
+                        </TextRedirect>
                     </TouchableOpacity>
+
                 </TextContainer>
+
             </ContainerLogin>
+
         </Container>
     );
 }

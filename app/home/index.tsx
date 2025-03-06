@@ -6,7 +6,7 @@ import { useForm, Controller } from 'react-hook-form';
 import {
   Container, Form, Input,
   ButtonSearch, ButtonContainer,
-  ButtonItemActionEdit, ButtonItemActionRemove
+  ButtonItemActionEdit, ButtonItemActionRemove,
 } from "./styles";
 
 import {
@@ -41,13 +41,16 @@ function Home() {
     }
 
     try {
+
       const response = await api.get("/own-products", {
         headers: {
           Authorization: `Bearer ${tokenState}`
         }
       });
+
       setProducts(response.data);
       setFilteredProducts(response.data);
+
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
     } finally {
@@ -65,17 +68,22 @@ function Home() {
     const searchTerm = getValues("searchTerm");
 
     if (searchTerm === "") {
+
       setFilteredProducts(products);
-    } else {
+    }
+    else {
+
       const filtered = products.filter((product) =>
         product.name.toLowerCase().startsWith(searchTerm.toLowerCase())
       );
+
       setFilteredProducts(filtered);
     }
   };
 
 
   const handleDeleteProduct = async (productId: string) => {
+
     Alert.alert(
       "Excluir produto",
       "Tem certeza que deseja excluir este produto?",
@@ -87,19 +95,25 @@ function Home() {
         {
           text: "Excluir",
           style: "destructive",
+
           onPress: async () => {
+
             try {
+
               await api.delete(`/product/${productId}`, {
                 headers: {
                   Authorization: `Bearer ${tokenState}`
+
                 }
               });
 
               setProducts((prevProducts) =>
                 prevProducts.filter((product) => product._id !== productId)
+
               );
               setFilteredProducts((prevFilteredProducts) =>
                 prevFilteredProducts.filter((product) => product._id !== productId)
+
               );
 
             } catch (error) {
@@ -144,7 +158,9 @@ function Home() {
 
         </Form>
 
+
         <Button onPress={handleNewProduct}>Novo item</Button>
+
 
         {loading ? (
           <ListEmptyText>Carregando...</ListEmptyText>
@@ -192,6 +208,7 @@ function Home() {
       </Container>
 
       <FooterMenu />
+
     </Config>
   );
 }

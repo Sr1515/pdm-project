@@ -1,22 +1,27 @@
 import React, { useContext, useState } from "react";
 import { ScrollView } from "react-native";
+
 import {
     ButtonAddContainer, Container, ContainerAddClient, ContainerInput,
     InputLabel, MapContainer
 } from "./styles";
 
+
+import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { router } from "expo-router";
+
+import { addClientSchema } from "@/schemas/validation";
+import { AuthContext } from "@/context/AuthProvider";
+import { api } from "@/api/axios";
+
 import Title from "@/components/Title";
 import FooterMenu from "@/components/FooterMenu";
 import Config from "@/components/Config";
 import FormInput from "@/components/Form";
-import { useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { addClientSchema } from "@/schemas/validation";
-import { AuthContext } from "@/context/AuthProvider";
-import { api } from "@/api/axios";
-import { router } from "expo-router";
 import MapComponent from "@/components/Map";
 import Button from "@/components/Button";
+
 
 interface LocationType {
     latitude: number;
@@ -24,7 +29,6 @@ interface LocationType {
     latitudeDelta: number;
     longitudeDelta: number;
 }
-
 
 function AddClient() {
     const [loading, setLoading] = useState(false);
@@ -58,7 +62,6 @@ function AddClient() {
         setLoading(true);
 
         try {
-            console.log("Geolocalização selecionada:",);
 
             const client = {
                 "name": data.name,
@@ -81,13 +84,15 @@ function AddClient() {
             });
 
             if (clientResponse.status === 201) {
+
                 alert("Cadastro bem-sucedido!");
                 router.replace("/cliente");
+
             } else {
                 alert("Erro ao cadastrar, tente novamente.");
             }
+
         } catch (error) {
-            console.error("Erro ao tentar cadastrar:", error);
             alert("Erro ao tentar cadastrar. Verifique seus dados e tente novamente.");
         } finally {
             setLoading(false);
@@ -96,12 +101,19 @@ function AddClient() {
 
     return (
         <Config>
+
             <Container>
+
                 <Title>Registrar Cliente</Title>
+
                 <ScrollView>
+
                     <ContainerAddClient>
+
                         <ContainerInput>
+
                             <InputLabel>Nome do cliente</InputLabel>
+
                             <FormInput
                                 name="name"
                                 control={control}
@@ -110,10 +122,13 @@ function AddClient() {
                                 errors={errors}
                                 isValid={isNameValid && !errors.name ? true : false}
                             />
+
                         </ContainerInput>
 
                         <ContainerInput>
+
                             <InputLabel>Email</InputLabel>
+
                             <FormInput
                                 name="email"
                                 control={control}
@@ -122,10 +137,13 @@ function AddClient() {
                                 errors={errors}
                                 isValid={isEmailValid && !errors.email ? true : false}
                             />
+
                         </ContainerInput>
 
                         <ContainerInput>
+
                             <InputLabel>Contato</InputLabel>
+
                             <FormInput
                                 name="contato"
                                 control={control}
@@ -134,10 +152,13 @@ function AddClient() {
                                 errors={errors}
                                 isValid={isContatoValid && !errors.contato ? true : false}
                             />
+
                         </ContainerInput>
 
                         <ContainerInput>
+
                             <InputLabel>Tipo de identificador</InputLabel>
+
                             <FormInput
                                 name="tipoIdentificador"
                                 control={control}
@@ -146,10 +167,13 @@ function AddClient() {
                                 errors={errors}
                                 isValid={isTipoIdentificadorValid && !errors.tipoIdentificador ? true : false}
                             />
+
                         </ContainerInput>
 
                         <ContainerInput>
+
                             <InputLabel>Identificador</InputLabel>
+
                             <FormInput
                                 name="identificador"
                                 control={control}
@@ -158,16 +182,19 @@ function AddClient() {
                                 errors={errors}
                                 isValid={isIdentificadorValid && !errors.identificador ? true : false}
                             />
+
                         </ContainerInput>
 
                         <InputLabel>Localização</InputLabel>
 
                         <MapContainer>
+
                             <MapComponent
                                 onGeolocationChange={(newGeolocation) => {
                                     setGeolocation(newGeolocation);
                                 }}
                             />
+
                         </MapContainer>
 
                         <ButtonAddContainer>
@@ -175,9 +202,13 @@ function AddClient() {
                         </ButtonAddContainer>
 
                     </ContainerAddClient>
+
                 </ScrollView>
+
             </Container>
+
             <FooterMenu />
+
         </Config>
     );
 }

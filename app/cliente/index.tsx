@@ -29,6 +29,7 @@ function Cliente() {
     const [loading, setLoading] = useState(true);
 
     const fetchClientes = async () => {
+
         if (!tokenState) {
             return;
         }
@@ -39,8 +40,10 @@ function Cliente() {
                     Authorization: `Bearer ${tokenState}`,
                 },
             });
+
             setClientes(response.data);
             setFilteredClientes(response.data);
+
         } catch (error) {
             console.error("Erro ao buscar clientes:", error);
         } finally {
@@ -59,16 +62,21 @@ function Cliente() {
 
         if (searchTerm === "") {
             setFilteredClientes(clientes);
+
         } else {
+
             const filtered = clientes.filter((cliente) =>
                 cliente.name.toLowerCase().startsWith(searchTerm.toLowerCase())
             );
+
             setFilteredClientes(filtered);
         }
     };
 
     const deleteVendasByCliente = async (clienteId: string) => {
+
         try {
+
             const vendasResponse = await api.get(`/supply?clienteId=${clienteId}`, {
                 headers: {
                     Authorization: `Bearer ${tokenState}`,
@@ -76,18 +84,21 @@ function Cliente() {
             });
 
             for (let venda of vendasResponse.data) {
+
                 await api.delete(`/supply/${venda._id}`, {
                     headers: {
                         Authorization: `Bearer ${tokenState}`,
                     },
                 });
             }
+
         } catch (error) {
             console.error("Erro ao excluir vendas relacionadas ao cliente:", error);
         }
     };
 
     const handleDeleteCliente = async (clienteId: string) => {
+
         Alert.alert(
             "Excluir cliente",
             "Tem certeza que deseja excluir este cliente e todas as vendas associadas?",
@@ -99,6 +110,7 @@ function Cliente() {
                 {
                     text: "Excluir",
                     style: "destructive",
+
                     onPress: async () => {
                         try {
                             await deleteVendasByCliente(clienteId);
@@ -130,14 +142,18 @@ function Cliente() {
 
     return (
         <Config>
+
             <Container>
+
                 <Title>Gerenciamento de Clientes</Title>
 
                 <Form>
+
                     <Controller
                         name="searchTerm"
                         control={control}
                         defaultValue=""
+
                         render={({ field: { onChange, value } }) => (
                             <Input
                                 placeholder="Pesquise o nome de clientes"
@@ -146,52 +162,68 @@ function Cliente() {
                                 onChangeText={onChange}
                             />
                         )}
+
                     />
 
                     <ButtonSearch onPress={handleSearch}>
                         <Ionicons name="search-outline" size={32} color={"black"} />
                     </ButtonSearch>
+
                 </Form>
 
                 <Button onPress={handleNewCliente}>Adicionar Cliente</Button>
 
                 <TableContainer>
+
                     <TableHeader>
+
                         <HeaderText>Nome</HeaderText>
                         <HeaderText>Email</HeaderText>
                         <HeaderText>Opções</HeaderText>
+
                     </TableHeader>
 
                     {loading ? (
                         <ListEmptyText>Carregando...</ListEmptyText>
                     ) : (
+
                         <FlatList
                             data={filteredClientes}
                             keyExtractor={(item) => item._id}
                             showsVerticalScrollIndicator={false}
+
                             ListEmptyComponent={() => (
                                 <ListEmptyText>
                                     Nenhum cliente foi encontrado. Tente outra pesquisa.
                                 </ListEmptyText>
                             )}
+
                             renderItem={({ item }) => (
+
                                 <TableRow>
+
                                     <RowText>{item.name}</RowText>
                                     <RowText>{item.email}</RowText>
 
                                     <ActionsContainer>
+
                                         <RemoveButton onPress={() => handleDeleteCliente(item._id)}>
                                             <Ionicons name="trash-bin-outline" size={15} color={"white"} />
                                         </RemoveButton>
+
                                     </ActionsContainer>
+
                                 </TableRow>
                             )}
                         />
                     )}
+
                 </TableContainer>
+
             </Container>
 
             <FooterMenu />
+
         </Config>
     );
 }

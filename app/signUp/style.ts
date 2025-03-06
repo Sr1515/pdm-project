@@ -15,26 +15,8 @@ export const ContainerSignUp = styled.SafeAreaView`
   justify-content: space-evenly;
 `;
 
-export const InputContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
-  width: 95%;
-  border-bottom-width: 2px;
-  border-bottom-color: gray; 
-  margin-bottom: 0px;
-`;
-
-export const InputSignUp = styled.TextInput`
-  flex: 1; 
-  height: 40px; 
-  color: gray;
-  font-size: 16px; 
-  margin-left: 10px; 
-  padding-left: 10px; 
-`;
-
 export const ButtonSignUp = styled.TouchableOpacity`
-  width: 86%;
+  width: 98%;
   height: 50px;
   padding-top: 50px;
   justify-content: center;
@@ -43,9 +25,10 @@ export const ButtonSignUp = styled.TouchableOpacity`
 `;
 
 export const TextContainer = styled.View`
-  padding-top: 20px;
-  flex-direction: row; 
-  align-items: center; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 `;
 
 export const Text = styled.Text`
@@ -53,9 +36,12 @@ export const Text = styled.Text`
   color: gray
 `;
 
-export const LoginLink = styled.Text`
-  color: #007bff; 
-  font-size: 16px;
-  text-decoration: underline; 
-  margin-left: 5px; 
+export const TextAbout = styled.Text`
+    font-size: ${props => props.theme.fontSizes.h3};
+    color: ${props => props.theme.colors.text}
+`;
+
+export const TextRedirect = styled.Text`
+    font-size: ${props => props.theme.fontSizes.h3};
+    color: ${props => props.theme.colors.accent};
 `;

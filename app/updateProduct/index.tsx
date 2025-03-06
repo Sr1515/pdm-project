@@ -1,24 +1,20 @@
 import React, { useContext, useState } from "react";
 import { ScrollView, Alert } from "react-native";
-
-import { Container, ContainerAddProduct, InputContainer, InputLabel } from "./styles";
-
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { addProductSchema } from "@/schemas/validation";
-
 import Button from "@/components/Button";
 import Title from "@/components/Title";
+import { Container, ContainerAddProduct, InputContainer, InputLabel } from "./styles";
+import ImagePickerComponent from "@/components/ImagePickerComponent";
 import FormInput from "@/components/Form";
 import FooterMenu from "@/components/FooterMenu";
 import Config from "@/components/Config";
-import ImagePickerComponent from "@/components/ImagePickerComponent";
-
 import { AuthContext } from "@/context/AuthProvider";
 import { api } from "@/api/axios";
 import { router } from "expo-router";
 import axios from "axios";
+import * as FileSystem from 'expo-file-system';
 
 interface ProductData {
     productName: string;
@@ -30,7 +26,7 @@ interface ProductData {
     description: string;
 }
 
-const AddProduct = () => {
+const UpdateProduct = () => {
     const [loading, setLoading] = useState(false);
     const { tokenState } = useContext(AuthContext);
     const [image, setImage] = useState<string | null>(null);
@@ -82,11 +78,16 @@ const AddProduct = () => {
             return;
         }
 
-        const price = parseFloat(data.value).toFixed(3);
+        const price = parseFloat(data.value);
         const ammount = parseInt(data.quantity, 10);
 
-        try {
+        if (isNaN(price) || isNaN(ammount)) {
+            Alert.alert("Erro", "Por favor, insira valores válidos para preço e quantidade.");
+            setLoading(false);
+            return;
+        }
 
+        try {
             const productData = {
                 "name": data.productName,
                 "description": data.description,
@@ -107,7 +108,6 @@ const AddProduct = () => {
             if (productResponse.status === 201) {
 
                 if (image) {
-
                     const data = new FormData();
 
                     data.append('file', {
@@ -115,6 +115,7 @@ const AddProduct = () => {
                         "type": "image/jpeg",
                         "uri": image
                     } as any)
+
 
                     const imageResponse = await api.put(`/product/${productResponse.data.id}`, data, {
                         headers: {
@@ -124,7 +125,7 @@ const AddProduct = () => {
                     });
 
                     if (imageResponse.status === 200) {
-                        Alert.alert("Sucesso", "Produto cadastrado com sucesso!");
+                        Alert.alert("Sucesso", "Imagem do produto atualizada com sucesso!");
                         router.replace("/home");
                     }
                 }
@@ -167,19 +168,12 @@ const AddProduct = () => {
 
     return (
         <Config>
-
             <Container>
-
                 <Title>Adicionar Produto</Title>
-
                 <ScrollView>
-
                     <ContainerAddProduct>
-
                         <InputContainer>
-
                             <InputLabel>Nome do produto</InputLabel>
-
                             <FormInput
                                 name="productName"
                                 control={control}
@@ -188,13 +182,10 @@ const AddProduct = () => {
                                 errors={errors}
                                 isValid={isProductNameValid && !errors.productName ? true : false}
                             />
-
                         </InputContainer>
 
                         <InputContainer>
-
                             <InputLabel>Data de fabricação</InputLabel>
-
                             <FormInput
                                 name="manufactureDate"
                                 control={control}
@@ -203,13 +194,10 @@ const AddProduct = () => {
                                 errors={errors}
                                 isValid={isManufactureDateValid && !errors.manufactureDate ? true : false}
                             />
-
                         </InputContainer>
 
                         <InputContainer>
-
                             <InputLabel>Data de validade</InputLabel>
-
                             <FormInput
                                 name="expiryDate"
                                 control={control}
@@ -218,13 +206,10 @@ const AddProduct = () => {
                                 errors={errors}
                                 isValid={isExpiryDateValid && !errors.expiryDate ? true : false}
                             />
-
                         </InputContainer>
 
                         <InputContainer>
-
                             <InputLabel>Tipo do produto</InputLabel>
-
                             <FormInput
                                 name="productType"
                                 control={control}
@@ -233,13 +218,10 @@ const AddProduct = () => {
                                 errors={errors}
                                 isValid={isProductTypeValid && !errors.productType ? true : false}
                             />
-
                         </InputContainer>
 
                         <InputContainer>
-
                             <InputLabel>Quantidade</InputLabel>
-
                             <FormInput
                                 name="quantity"
                                 control={control}
@@ -248,13 +230,10 @@ const AddProduct = () => {
                                 errors={errors}
                                 isValid={isQuantityValid && !errors.quantity ? true : false}
                             />
-
                         </InputContainer>
 
                         <InputContainer>
-
                             <InputLabel>Valor</InputLabel>
-
                             <FormInput
                                 name="value"
                                 control={control}
@@ -263,13 +242,10 @@ const AddProduct = () => {
                                 errors={errors}
                                 isValid={isValueValid && !errors.value ? true : false}
                             />
-
                         </InputContainer>
 
                         <InputContainer>
-
                             <InputLabel>Descrição</InputLabel>
-
                             <FormInput
                                 name="description"
                                 control={control}
@@ -288,15 +264,11 @@ const AddProduct = () => {
                         </Button>
 
                     </ContainerAddProduct>
-
                 </ScrollView>
-
             </Container>
-
             <FooterMenu />
-
         </Config>
     );
 };
 
-export default AddProduct;
+export default UpdateProduct;

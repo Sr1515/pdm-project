@@ -36,6 +36,7 @@ function MapCliente() {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
             });
+
         } else {
             console.log("Permissão de localização negada");
         }
@@ -52,7 +53,9 @@ function MapCliente() {
                     Authorization: `Bearer ${tokenState}`,
                 },
             });
+
             setClientes(response.data);
+
         } catch (error) {
             console.error("Erro ao buscar clientes:", error);
         } finally {
@@ -77,11 +80,15 @@ function MapCliente() {
 
     return (
         <Config>
+
             <Container>
+
                 <Title>Encontre seus clientes</Title>
 
                 <StyledMapView initialRegion={userLocation}>
+
                     {clientes.map((client) => {
+
                         const latitude = client.address.coordinates[1];
                         const longitude = client.address.coordinates[0];
 
@@ -107,6 +114,7 @@ function MapCliente() {
             </Container>
 
             <FooterMenu />
+
         </Config>
     );
 };
