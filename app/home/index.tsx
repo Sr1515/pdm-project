@@ -188,7 +188,10 @@ function Home() {
                 </ProductInfo>
 
                 <ButtonContainer>
-                  <ButtonItemActionEdit>
+                  <ButtonItemActionEdit onPress={() => router.push({
+                    pathname: "/updateProduct",
+                    params: { id: item._id }
+                  })}>
                     <Ionicons name="pencil-outline" size={25} color={"white"} />
                   </ButtonItemActionEdit>
 

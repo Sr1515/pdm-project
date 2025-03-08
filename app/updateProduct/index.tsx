@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ScrollView, Alert } from "react-native";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,7 +12,7 @@ import FooterMenu from "@/components/FooterMenu";
 import Config from "@/components/Config";
 import { AuthContext } from "@/context/AuthProvider";
 import { api } from "@/api/axios";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import axios from "axios";
 import * as FileSystem from 'expo-file-system';
 
@@ -27,6 +27,8 @@ interface ProductData {
 }
 
 const UpdateProduct = () => {
+    const { id } = useLocalSearchParams<{ id: string }>();
+    const [productPlaceholder, setProductPlaceholder] = useState<any>({});
     const [loading, setLoading] = useState(false);
     const { tokenState } = useContext(AuthContext);
     const [image, setImage] = useState<string | null>(null);
@@ -44,6 +46,8 @@ const UpdateProduct = () => {
         }
     });
 
+    console.log(id)
+
     const productName = useWatch({ control, name: "productName" });
     const manufactureDate = useWatch({ control, name: "manufactureDate" });
     const expiryDate = useWatch({ control, name: "expiryDate" });
@@ -59,6 +63,27 @@ const UpdateProduct = () => {
     const isDescriptionValid = description?.length > 0;
     const isQuantityValid = quantity && Number(quantity) > 0;
     const isValueValid = value && parseFloat(value) > 0;
+
+    useEffect(() => {
+        const getProduct = async () => {
+            try {
+                const response = await api.get(`/product/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${tokenState}`,
+                    },
+                });
+
+                // setProductPlaceholder(response.data)
+                console.log(response)
+
+            } catch (error) {
+                Alert.alert("Erro ao solicitar os dados");
+            }
+        };
+        getProduct();
+
+    }, [tokenState]);
+
 
     const onSubmit = async (data: ProductData) => {
         setLoading(true);
@@ -169,15 +194,18 @@ const UpdateProduct = () => {
     return (
         <Config>
             <Container>
+
                 <Title>Adicionar Produto</Title>
+
                 <ScrollView>
                     <ContainerAddProduct>
+
                         <InputContainer>
                             <InputLabel>Nome do produto</InputLabel>
                             <FormInput
                                 name="productName"
                                 control={control}
-                                placeholder="Digite o nome do produto"
+                                placeholder={productPlaceholder?.name || "Nome do produto"}
                                 errorMessage={errors.productName?.message}
                                 errors={errors}
                                 isValid={isProductNameValid && !errors.productName ? true : false}
@@ -189,7 +217,7 @@ const UpdateProduct = () => {
                             <FormInput
                                 name="manufactureDate"
                                 control={control}
-                                placeholder="dd/mm/aaaa"
+                                placeholder={productPlaceholder?.manufactureDate || "dd/mm/aaaa"}
                                 errorMessage={errors.manufactureDate?.message}
                                 errors={errors}
                                 isValid={isManufactureDateValid && !errors.manufactureDate ? true : false}
@@ -201,7 +229,7 @@ const UpdateProduct = () => {
                             <FormInput
                                 name="expiryDate"
                                 control={control}
-                                placeholder="dd/mm/aaaa"
+                                placeholder={productPlaceholder?.expiryDate || "dd/mm/aaaa"}
                                 errorMessage={errors.expiryDate?.message}
                                 errors={errors}
                                 isValid={isExpiryDateValid && !errors.expiryDate ? true : false}
@@ -213,7 +241,7 @@ const UpdateProduct = () => {
                             <FormInput
                                 name="productType"
                                 control={control}
-                                placeholder="Digite o tipo do produto"
+                                placeholder={productPlaceholder?.productType || "Digite o tipo do produto"}
                                 errorMessage={errors.productType?.message}
                                 errors={errors}
                                 isValid={isProductTypeValid && !errors.productType ? true : false}
@@ -225,7 +253,7 @@ const UpdateProduct = () => {
                             <FormInput
                                 name="quantity"
                                 control={control}
-                                placeholder="Digite a quantidade"
+                                placeholder={productPlaceholder?.ammount || "Digite a quantidade"}
                                 errorMessage={errors.quantity?.message}
                                 errors={errors}
                                 isValid={isQuantityValid && !errors.quantity ? true : false}
@@ -237,7 +265,7 @@ const UpdateProduct = () => {
                             <FormInput
                                 name="value"
                                 control={control}
-                                placeholder="0.00"
+                                placeholder={productPlaceholder?.value || "0.00"}
                                 errorMessage={errors.value?.message}
                                 errors={errors}
                                 isValid={isValueValid && !errors.value ? true : false}
@@ -249,7 +277,7 @@ const UpdateProduct = () => {
                             <FormInput
                                 name="description"
                                 control={control}
-                                placeholder="Digite a descrição do produto"
+                                placeholder={productPlaceholder?.description || "Digite a descrição do produto"}
                                 errorMessage={errors.description?.message}
                                 errors={errors}
                                 isValid={isDescriptionValid && !errors.description ? true : false}

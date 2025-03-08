@@ -1,6 +1,7 @@
 import { theme } from "@/theme";
 import styled from "styled-components/native";
 import MapView from 'react-native-maps';
+import { TouchableOpacity } from "react-native";
 
 
 export const Container = styled.View`

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { Alert, FlatList, Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {
-    ButtonAddFooter,
     Container,
     RowText,
     ListEmptyText,
@@ -15,6 +14,7 @@ import {
     TableHeader,
     HeaderText,
     RowTextList,
+    ButtonAdd,
 } from "./styles";
 import Title from "@/components/Title";
 import FooterMenu from "@/components/FooterMenu";
@@ -24,8 +24,6 @@ import { useRouter } from "expo-router";
 import { useLocalSearchParams } from 'expo-router';
 import { api } from "@/api/axios";
 import { AuthContext } from "@/context/AuthProvider";
-
-
 
 function GerenciadorVendas() {
     const { tokenState } = useContext(AuthContext);
@@ -94,8 +92,11 @@ function GerenciadorVendas() {
                     }
                     : item
             );
+
             setItensVenda(updatedItens);
+
         } else {
+
             setItensVenda([
                 ...itensVenda,
                 {
@@ -104,6 +105,7 @@ function GerenciadorVendas() {
                     precoTotal: selectedProduct.price * quantidade,
                 },
             ]);
+
         }
 
         setSelectedProduct(null);
@@ -140,23 +142,27 @@ function GerenciadorVendas() {
             for (const item of itensVenda) {
                 const produto = produtos.find((p) => p._id === item._id);
 
-                if (!produto) continue;
+                if (produto) {
 
-                const quantidadeDisponivel = produto.ammount;
-                const novaQuantidade = quantidadeDisponivel - item.quantidade;
+                    const ammountAfterPurchase = Number(produto.ammount) - Number(item.quantidade);
+                    console.log(ammountAfterPurchase);
 
-                try {
-                    await api.put(`/product/${item._id}`, {
-                        ammount: novaQuantidade,
-                    }, {
-                        headers: {
-                            Authorization: `Bearer ${tokenState}`,
-                        },
-                    });
-                } catch (error) {
-                    console.error(`Erro ao atualizar o estoque do produto ${produto.name}:`, error);
-                    Alert.alert("Erro", `Falha ao atualizar o estoque para o produto ${produto.name}.`);
-                    return;
+                    try {
+                        const response = await api.put(`/product/${item._id}`, {
+                            "ammount": ammountAfterPurchase
+                        }, {
+                            headers: {
+                                Authorization: `Bearer ${tokenState}`,
+                            },
+                        });
+
+                        console.log(response.data)
+
+                    } catch (error) {
+                        console.error(`Erro ao atualizar o estoque do produto ${produto.name}:`, error);
+                        Alert.alert("Erro", `Falha ao atualizar o estoque para o produto ${produto.name}.`);
+                        return;
+                    }
                 }
             }
 
@@ -173,14 +179,16 @@ function GerenciadorVendas() {
 
     return (
         <Config>
+
             <Container>
+
                 <Title>Gerenciador de Vendas</Title>
 
-                <ButtonAddFooter>
+                <ButtonAdd>
                     <Button onPress={() => setModalProdutosVisible(true)}>
                         Adicionar Produto
                     </Button>
-                </ButtonAddFooter>
+                </ButtonAdd>
 
                 <Modal
                     animationType="slide"
@@ -274,6 +282,7 @@ function GerenciadorVendas() {
             </Container>
 
             <FooterMenu />
+
         </Config>
     );
 }
