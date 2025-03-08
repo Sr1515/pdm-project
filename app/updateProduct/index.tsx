@@ -14,7 +14,6 @@ import { AuthContext } from "@/context/AuthProvider";
 import { api } from "@/api/axios";
 import { router, useLocalSearchParams } from "expo-router";
 import axios from "axios";
-import * as FileSystem from 'expo-file-system';
 
 interface ProductData {
     productName: string;
@@ -46,8 +45,6 @@ const UpdateProduct = () => {
         }
     });
 
-    console.log(id)
-
     const productName = useWatch({ control, name: "productName" });
     const manufactureDate = useWatch({ control, name: "manufactureDate" });
     const expiryDate = useWatch({ control, name: "expiryDate" });
@@ -73,8 +70,15 @@ const UpdateProduct = () => {
                     },
                 });
 
-                // setProductPlaceholder(response.data)
-                console.log(response)
+                const updatedProduct = {
+                    ...response.data,
+                    ammount: String(response.data.ammount),
+                    price: String(response.data.price),
+                    manufacturing_date: new Date(response.data.manufacturing_date).toLocaleDateString('pt-BR'),
+                    expiration_date: new Date(response.data.expiration_date).toLocaleDateString('pt-BR'),
+                };
+
+                setProductPlaceholder(updatedProduct)
 
             } catch (error) {
                 Alert.alert("Erro ao solicitar os dados");
@@ -84,12 +88,13 @@ const UpdateProduct = () => {
 
     }, [tokenState]);
 
-
     const onSubmit = async (data: ProductData) => {
         setLoading(true);
 
         const formattedManufacturingDate = isValidDate(data.manufactureDate);
+        const formattedExpiryDateFuture = data.expiryDate ? isValidFutureDate(data.expiryDate) : null;
         const formattedExpiryDate = data.expiryDate ? isValidDate(data.expiryDate) : null;
+
 
         if (!formattedManufacturingDate) {
             Alert.alert("Erro", "Data de fabricação inválida.");
@@ -97,8 +102,8 @@ const UpdateProduct = () => {
             return;
         }
 
-        if (data.expiryDate && !formattedExpiryDate) {
-            Alert.alert("Erro", "Data de validade inválida.");
+        if (data.expiryDate && !formattedExpiryDateFuture) {
+            Alert.alert("Erro", "Data de validade inválida, produto vencido!.");
             setLoading(false);
             return;
         }
@@ -124,35 +129,48 @@ const UpdateProduct = () => {
                 "image": ""
             }
 
-            const productResponse = await api.post("/product", productData, {
+            const productResponse = await api.put(`/product/${id}`, productData, {
                 headers: {
                     Authorization: `Bearer ${tokenState}`,
                 },
             });
 
-            if (productResponse.status === 201) {
-
+            if (productResponse.status === 200) {
                 if (image) {
-                    const data = new FormData();
+                    const imageName = image.split('/').pop()?.split('.').slice(0, -1).join('.');
+                    const productImageName = productPlaceholder.image.split('.').slice(0, -1).join('.');
 
-                    data.append('file', {
-                        "name": "imagem.jpeg",
-                        "type": "image/jpeg",
-                        "uri": image
-                    } as any)
+                    if (imageName !== productImageName) {
 
+                        try {
 
-                    const imageResponse = await api.put(`/product/${productResponse.data.id}`, data, {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                            Authorization: `Bearer ${tokenState}`,
-                        },
-                    });
+                            const data = new FormData();
 
-                    if (imageResponse.status === 200) {
-                        Alert.alert("Sucesso", "Imagem do produto atualizada com sucesso!");
+                            data.append('file', {
+                                "name": "imagem.jpeg",
+                                "type": "image/jpeg",
+                                "uri": image
+                            } as any)
+
+                            const imageResponse = await api.patch(`/product/${id}`, data, {
+                                headers: {
+                                    "Content-Type": "multipart/form-data",
+                                    Authorization: `Bearer ${tokenState}`,
+                                },
+                            });
+
+                            if (imageResponse.status === 200) {
+                                Alert.alert("Sucesso", "Imagem do produto atualizada com sucesso!");
+                                router.replace("/home");
+                            }
+                        } catch (error) {
+                            Alert.alert("Erro", "Erro ao enviar a imagem. Tente novamente.");
+                        }
+                    } else {
                         router.replace("/home");
                     }
+                } else {
+                    router.replace("/home");
                 }
             }
         } catch (error) {
@@ -169,6 +187,34 @@ const UpdateProduct = () => {
             setLoading(false);
         }
     };
+
+
+    const isValidFutureDate = (dateStr: string): boolean => {
+        const parts = dateStr.split('/');
+        if (parts.length !== 3) return false;
+
+        const day = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10) - 1;
+        const year = parseInt(parts[2], 10);
+
+        const date = new Date(year, month, day);
+        const currentDate = new Date();
+
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth();
+        const currentDay = currentDate.getDate();
+
+
+        if (
+            date.getFullYear() < currentYear ||
+            (date.getFullYear() === currentYear && (date.getMonth() < currentMonth || (date.getMonth() === currentMonth && date.getDate() < currentDay)))
+        ) {
+            return false;
+        }
+
+        return true;
+    };
+
 
     const isValidDate = (dateStr: string): Date | null => {
         const parts = dateStr.split('/');
@@ -217,7 +263,7 @@ const UpdateProduct = () => {
                             <FormInput
                                 name="manufactureDate"
                                 control={control}
-                                placeholder={productPlaceholder?.manufactureDate || "dd/mm/aaaa"}
+                                placeholder={productPlaceholder?.manufacturing_date || "dd/mm/aaaa"}
                                 errorMessage={errors.manufactureDate?.message}
                                 errors={errors}
                                 isValid={isManufactureDateValid && !errors.manufactureDate ? true : false}
@@ -229,7 +275,7 @@ const UpdateProduct = () => {
                             <FormInput
                                 name="expiryDate"
                                 control={control}
-                                placeholder={productPlaceholder?.expiryDate || "dd/mm/aaaa"}
+                                placeholder={productPlaceholder?.expiration_date || "dd/mm/aaaa"}
                                 errorMessage={errors.expiryDate?.message}
                                 errors={errors}
                                 isValid={isExpiryDateValid && !errors.expiryDate ? true : false}
@@ -241,7 +287,7 @@ const UpdateProduct = () => {
                             <FormInput
                                 name="productType"
                                 control={control}
-                                placeholder={productPlaceholder?.productType || "Digite o tipo do produto"}
+                                placeholder={productPlaceholder?.type || "Digite o tipo do produto"}
                                 errorMessage={errors.productType?.message}
                                 errors={errors}
                                 isValid={isProductTypeValid && !errors.productType ? true : false}
@@ -265,7 +311,7 @@ const UpdateProduct = () => {
                             <FormInput
                                 name="value"
                                 control={control}
-                                placeholder={productPlaceholder?.value || "0.00"}
+                                placeholder={productPlaceholder?.price || "0.00"}
                                 errorMessage={errors.value?.message}
                                 errors={errors}
                                 isValid={isValueValid && !errors.value ? true : false}

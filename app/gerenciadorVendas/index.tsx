@@ -145,7 +145,6 @@ function GerenciadorVendas() {
                 if (produto) {
 
                     const ammountAfterPurchase = Number(produto.ammount) - Number(item.quantidade);
-                    console.log(ammountAfterPurchase);
 
                     try {
                         const response = await api.put(`/product/${item._id}`, {
@@ -155,8 +154,6 @@ function GerenciadorVendas() {
                                 Authorization: `Bearer ${tokenState}`,
                             },
                         });
-
-                        console.log(response.data)
 
                     } catch (error) {
                         console.error(`Erro ao atualizar o estoque do produto ${produto.name}:`, error);

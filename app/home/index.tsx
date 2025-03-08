@@ -182,9 +182,11 @@ function Home() {
                 <ProductImageShow id={item._id} />
 
                 <ProductInfo>
-                  <ProductText>{item.name}</ProductText>
-                  <ProductDescription>{item.description}</ProductDescription>
-                  <ProductPrice>{`R$: ${item.price} reais`}</ProductPrice>
+                  <ProductText>{`Produto: ${item.name}`}</ProductText>
+                  <ProductDescription>{`Qtd: ${item.price} unidades`}</ProductDescription>
+                  <ProductPrice>{`R$: ${item.price} reais (unidade)`}</ProductPrice>
+                  <ProductDescription>{`Descrição: ${item.description}`}</ProductDescription>
+
                 </ProductInfo>
 
                 <ButtonContainer>

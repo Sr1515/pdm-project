@@ -68,6 +68,7 @@ const AddProduct = () => {
         setLoading(true);
 
         const formattedManufacturingDate = isValidDate(data.manufactureDate);
+        const formattedExpiryDateFuture = data.expiryDate ? isValidFutureDate(data.expiryDate) : null;
         const formattedExpiryDate = data.expiryDate ? isValidDate(data.expiryDate) : null;
 
         if (!formattedManufacturingDate) {
@@ -152,6 +153,33 @@ const AddProduct = () => {
         }
     };
 
+    const isValidFutureDate = (dateStr: string): boolean => {
+        const parts = dateStr.split('/');
+        if (parts.length !== 3) return false;
+
+        const day = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10) - 1;
+        const year = parseInt(parts[2], 10);
+
+        const date = new Date(year, month, day);
+        const currentDate = new Date();
+
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth();
+        const currentDay = currentDate.getDate();
+
+
+        if (
+            date.getFullYear() < currentYear ||
+            (date.getFullYear() === currentYear && (date.getMonth() < currentMonth || (date.getMonth() === currentMonth && date.getDate() < currentDay)))
+        ) {
+            return false;
+        }
+
+        return true;
+    };
+
+
     const isValidDate = (dateStr: string): Date | null => {
         const parts = dateStr.split('/');
         if (parts.length !== 3) return null;
@@ -168,6 +196,7 @@ const AddProduct = () => {
 
         return null;
     };
+
 
     const handleImagePicked = (uri: string) => {
         setImage(uri);
