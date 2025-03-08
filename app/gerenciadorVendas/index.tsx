@@ -1,80 +1,277 @@
-import React from "react";
-import 'react-native-reanimated';
-import { View, ScrollView } from "react-native";
-
+import React, { useState, useEffect, useContext } from "react";
+import { Alert, FlatList, Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-
 import {
     ButtonAddFooter,
-    ButtonInput,
-    Container, Form, Input,
-    InputAddProduct, InputContainer, InputLabel
+    Container,
+    RowText,
+    ListEmptyText,
+    ModalContainer,
+    ModalContent,
+    ProductItem,
+    ActionsContainer,
+    RemoveButton,
+    ButtonContainer,
+    TableHeader,
+    HeaderText,
+    RowTextList,
 } from "./styles";
-
-import FooterMenu from "@/components/FooterMenu";
 import Title from "@/components/Title";
-import Subtitle from "@/components/Subtitle";
+import FooterMenu from "@/components/FooterMenu";
 import Button from "@/components/Button";
 import Config from "@/components/Config";
-import { ButtonSearch } from "../cliente/style";
+import { useRouter } from "expo-router";
+import { useLocalSearchParams } from 'expo-router';
+import { api } from "@/api/axios";
+import { AuthContext } from "@/context/AuthProvider";
+
 
 
 function GerenciadorVendas() {
+    const { tokenState } = useContext(AuthContext);
+    const { id } = useLocalSearchParams<{ id: string }>();
+    const [produtos, setProdutos] = useState<any[]>([]);
+    const [itensVenda, setItensVenda] = useState<any[]>([]);
+    const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
+    const [quantidade, setQuantidade] = useState<number>(1);
+    const [modalProdutosVisible, setModalProdutosVisible] = useState<boolean>(false);
+    const [modalQuantidadeVisible, setModalQuantidadeVisible] = useState<boolean>(false);
+    const [loading, setLoading] = useState(true);
+    const router = useRouter();
+
+    useEffect(() => {
+
+        const fetchProdutos = async () => {
+            try {
+                const response = await api.get("/own-products", {
+                    headers: {
+                        Authorization: `Bearer ${tokenState}`
+                    }
+                });
+
+                setProdutos(response.data);
+            } catch (error) {
+                console.error("Erro ao buscar produtos:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProdutos();
+
+    }, []);
+
+    const handleAdicionarProduto = async () => {
+
+        if (!selectedProduct) {
+            Alert.alert("Erro", "Selecione um produto");
+            return;
+        }
+
+        const produto = produtos.find((p) => p._id === selectedProduct._id);
+
+        if (!produto) {
+            Alert.alert("Erro", "Produto não encontrado");
+            return;
+        }
+
+        const quantidadeDisponivel = produto.ammount;
+
+        if (quantidade > quantidadeDisponivel) {
+            Alert.alert("Erro", `Quantidade indisponível. Disponível: ${quantidadeDisponivel}`);
+            return;
+        }
+
+        const produtoExistente = itensVenda.find((item) => item._id === selectedProduct._id);
+
+        if (produtoExistente) {
+            const updatedItens = itensVenda.map((item) =>
+                item._id === selectedProduct._id
+                    ? {
+                        ...item,
+                        quantidade: item.quantidade + quantidade,
+                        precoTotal: item.price * (item.quantidade + quantidade),
+                    }
+                    : item
+            );
+            setItensVenda(updatedItens);
+        } else {
+            setItensVenda([
+                ...itensVenda,
+                {
+                    ...selectedProduct,
+                    quantidade: quantidade,
+                    precoTotal: selectedProduct.price * quantidade,
+                },
+            ]);
+        }
+
+        setSelectedProduct(null);
+        setQuantidade(1);
+        setModalQuantidadeVisible(false);
+    };
+
+
+    const handleRemoverProduto = (produtoId: string) => {
+        setItensVenda(itensVenda.filter((item) => item._id !== produtoId));
+    };
+
+    const handleFinalizarCompra = async () => {
+        try {
+            const venda = { person_id: id };
+
+            const products = itensVenda.map(item => ({
+                product_id: item._id,
+                quantity: item.quantidade,
+            }));
+
+            const vendaFormated = {
+                ...venda,
+                products,
+            };
+
+            const vendaResponse = await api.post("/supply", vendaFormated, {
+                headers: {
+                    Authorization: `Bearer ${tokenState}`,
+                },
+            });
+
+
+            for (const item of itensVenda) {
+                const produto = produtos.find((p) => p._id === item._id);
+
+                if (!produto) continue;
+
+                const quantidadeDisponivel = produto.ammount;
+                const novaQuantidade = quantidadeDisponivel - item.quantidade;
+
+                try {
+                    await api.put(`/product/${item._id}`, {
+                        ammount: novaQuantidade,
+                    }, {
+                        headers: {
+                            Authorization: `Bearer ${tokenState}`,
+                        },
+                    });
+                } catch (error) {
+                    console.error(`Erro ao atualizar o estoque do produto ${produto.name}:`, error);
+                    Alert.alert("Erro", `Falha ao atualizar o estoque para o produto ${produto.name}.`);
+                    return;
+                }
+            }
+
+            Alert.alert("Sucesso", "Compra realizada com sucesso");
+            router.push("/home");
+
+        } catch (error) {
+            console.error("Erro ao finalizar compra:", error);
+            Alert.alert("Erro", "Não foi possível finalizar a compra");
+        }
+    };
+
 
 
     return (
         <Config>
+            <Container>
+                <Title>Gerenciador de Vendas</Title>
 
-            <ScrollView>
+                <ButtonAddFooter>
+                    <Button onPress={() => setModalProdutosVisible(true)}>
+                        Adicionar Produto
+                    </Button>
+                </ButtonAddFooter>
 
-                <Container>
-
-                    <Title>Gerenciador de Vendas</Title>
-                    <Subtitle>Adicionar nova venda</Subtitle>
-
-                    <View>
-
-                        <InputContainer>
-                            <InputLabel>Nome do produto</InputLabel>
-                            <InputAddProduct
-                                placeholder="Digite o nome do produto"
-                                placeholderTextColor="gray"
-                                underlineColorAndroid="transparent"
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalProdutosVisible}
+                    onRequestClose={() => setModalProdutosVisible(false)}
+                >
+                    <ModalContainer>
+                        <ModalContent>
+                            <FlatList
+                                data={produtos}
+                                keyExtractor={(item) => item._id}
+                                renderItem={({ item }) => (
+                                    <ProductItem onPress={() => {
+                                        setSelectedProduct(item);
+                                        setModalProdutosVisible(false);
+                                        setModalQuantidadeVisible(true);
+                                    }}>
+                                        <RowText>{item.name}</RowText>
+                                        <RowText>R$ {item.price}</RowText>
+                                    </ProductItem>
+                                )}
+                                ListEmptyComponent={() => (
+                                    <ListEmptyText>Nenhum produto encontrado</ListEmptyText>
+                                )}
                             />
-                        </InputContainer>
 
-                        <Form>
+                            <Button onPress={() => setModalProdutosVisible(false)}>
+                                Fechar
+                            </Button>
+                        </ModalContent>
+                    </ModalContainer>
+                </Modal>
 
-                            <Input
-                                placeholder="1"
-                                placeholderTextColor="#6B6B6B"
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalQuantidadeVisible}
+                    onRequestClose={() => setModalQuantidadeVisible(false)}
+                >
+                    <ModalContainer>
+                        <ModalContent>
+                            <Text>Quantidade:</Text>
+                            <TextInput
+                                value={quantidade.toString()}
+                                onChangeText={(text) => setQuantidade(Number(text))}
                                 keyboardType="numeric"
                             />
 
-                            <ButtonInput>
-                                <Ionicons name="add-outline" size={32} color={"black"} />
-                            </ButtonInput>
+                            <ButtonContainer>
+                                <Button onPress={handleAdicionarProduto}>Adicionar</Button>
+                            </ButtonContainer>
 
-                            <ButtonInput>
-                                <Ionicons name="remove-outline" size={32} color={"black"} />
-                            </ButtonInput>
+                            <Button onPress={() => setModalQuantidadeVisible(false)}>
+                                Fechar
+                            </Button>
+                        </ModalContent>
+                    </ModalContainer>
+                </Modal>
 
+                <TableHeader>
+                    <HeaderText>Produto</HeaderText>
+                    <HeaderText>Quantidade</HeaderText>
+                    <HeaderText>Preço</HeaderText>
+                    <HeaderText>Ações</HeaderText>
+                </TableHeader>
 
-                        </Form>
+                <FlatList
+                    data={itensVenda}
+                    keyExtractor={(item) => item._id}
+                    renderItem={({ item }) => (
+                        <ProductItem>
+                            <RowTextList>{item.name}</RowTextList>
+                            <RowTextList>{item.quantidade}</RowTextList>
+                            <RowTextList>R$ {item.precoTotal.toFixed(2)}</RowTextList>
+                            <ActionsContainer>
+                                <RemoveButton onPress={() => handleRemoverProduto(item._id)}>
+                                    <Ionicons name="trash-bin-outline" size={15} color={"white"} />
+                                </RemoveButton>
+                            </ActionsContainer>
+                        </ProductItem>
+                    )}
+                    ListEmptyComponent={() => (
+                        <ListEmptyText>Não há produtos na lista de vendas.</ListEmptyText>
+                    )}
+                />
 
-                    </View>
-
-                    {/* <ButtonAddFooter>
-                        <Button>Adicionar Produto</Button>
-                    </ButtonAddFooter>
-
-                    <Container>
-                        <Button>Realizar Venda</Button>
-                        <Button>Histórico de Vendas</Button>
-                    </Container> */}
-
-                </Container>
-            </ScrollView >
+                {itensVenda.length > 0 && (
+                    <Button onPress={handleFinalizarCompra}>Finalizar Compra</Button>
+                )}
+            </Container>
 
             <FooterMenu />
         </Config>

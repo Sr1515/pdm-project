@@ -136,7 +136,7 @@ function Venda() {
                                     <RowText>{item.person.name}</RowText>
                                     <RowText>
                                         {item.products.length > 0
-                                            ? `${[item.products[0].product.name + " " + item.products[1].product.name]}${item.products.length > 1 ? '...' : ''}`
+                                            ? `${[item.products[0].product.name + " " + '...']}${item.products.length > 1 ? '...' : ''}`
                                             : "Sem produtos"}
                                     </RowText>
 

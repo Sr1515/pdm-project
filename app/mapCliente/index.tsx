@@ -23,6 +23,7 @@ function MapCliente() {
     const [userLocation, setUserLocation] = useState<LocationType | null>(null);
     const [loading, setLoading] = useState(true);
 
+    // Função para obter a localização do usuário
     const getUserLocation = async () => {
         const { status } = await Location.requestForegroundPermissionsAsync();
 
@@ -36,16 +37,14 @@ function MapCliente() {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
             });
-
         } else {
             console.log("Permissão de localização negada");
         }
     };
 
+    // Função para buscar os clientes
     const fetchClientes = async () => {
-        if (!tokenState) {
-            return;
-        }
+        if (!tokenState) return;
 
         try {
             const response = await api.get("/person", {
@@ -53,9 +52,7 @@ function MapCliente() {
                     Authorization: `Bearer ${tokenState}`,
                 },
             });
-
             setClientes(response.data);
-
         } catch (error) {
             console.error("Erro ao buscar clientes:", error);
         } finally {
@@ -63,35 +60,34 @@ function MapCliente() {
         }
     };
 
+    // Efeito para obter a localização e os clientes na primeira carga
     useEffect(() => {
         if (tokenState) {
-            getUserLocation();
-            fetchClientes();
+            getUserLocation(); // Buscar localização do usuário
+            fetchClientes(); // Buscar clientes
         }
     }, [tokenState]);
 
-    const handleAddCliente = () => {
-        router.replace("/addCliente")
+    // Função para atualizar o mapa
+    const handleAtualizarMapa = async () => {
+        setLoading(true); // Define que está carregando novamente
+        await fetchClientes(); // Recarrega os dados dos clientes
+        await getUserLocation(); // Recarrega a localização do usuário
+        setLoading(false); // Finaliza o carregamento
     };
-
-    if (loading || !userLocation) {
-        return <Title>Carregando Mapa...</Title>;
-    }
 
     return (
         <Config>
-
             <Container>
-
                 <Title>Encontre seus clientes</Title>
 
-                <StyledMapView initialRegion={userLocation}>
+                {/* Renderizando o mapa com os dados dos clientes */}
+                <StyledMapView>
 
+                    {/* Verificando se há clientes e renderizando os markers */}
                     {clientes.map((client) => {
-
                         const latitude = client.address.coordinates[1];
                         const longitude = client.address.coordinates[0];
-
                         return (
                             <Marker
                                 key={client._id}
@@ -107,16 +103,16 @@ function MapCliente() {
 
                 </StyledMapView>
 
+                {/* Botão para atualizar o mapa */}
                 <ButtonClientes>
-                    <Button onPress={handleAddCliente}>Adicionar Cliente</Button>
+                    <Button onPress={handleAtualizarMapa}>Atualizar Mapa</Button>
                 </ButtonClientes>
 
             </Container>
 
             <FooterMenu />
-
         </Config>
     );
-};
+}
 
 export default MapCliente;

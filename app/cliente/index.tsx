@@ -6,6 +6,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 import {
     ActionsContainer, ButtonSearch,
+    BuyButton,
     Container, EmptyText, Form, HeaderText, Input, RemoveButton,
     RowText, TableContainer, TableHeader, TableRow
 } from "./style";
@@ -210,6 +211,14 @@ function Cliente() {
                                         <RemoveButton onPress={() => handleDeleteCliente(item._id)}>
                                             <Ionicons name="trash-bin-outline" size={15} color={"white"} />
                                         </RemoveButton>
+
+
+                                        <BuyButton onPress={() => router.push({
+                                            pathname: "/gerenciadorVendas",
+                                            params: { id: item._id }
+                                        })}>
+                                            <Ionicons name="cart-outline" size={15} color={"white"} />
+                                        </BuyButton>
 
                                     </ActionsContainer>
 

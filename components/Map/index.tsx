@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View } from "react-native";
-import MapView, { Marker, Region, LatLng } from "react-native-maps";
+import MapView, { Marker, Region } from "react-native-maps";
+import * as Location from 'expo-location';
 
 interface LocationType {
     latitude: number;
@@ -10,82 +11,86 @@ interface LocationType {
 }
 
 interface MapComponentProps {
-    onGeolocationChange: (geolocation: LocationType) => void;
+    onGeolocationChange: (geolocation: LocationType | null) => void;
 }
 
 const MapComponent: React.FC<MapComponentProps> = ({ onGeolocationChange }) => {
     const [region, setRegion] = useState<LocationType>({
-        latitude: -23.5505,
-        longitude: -46.6333,
+        latitude: 37.78825,
+        longitude: -122.4324,
         latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        longitudeDelta: 0.0421
     });
 
-    const [markerPosition, setMarkerPosition] = useState<LatLng | null>(null);
-
-    const handleMapPress = (event: { nativeEvent: { coordinate: LatLng } }) => {
-        const { latitude, longitude } = event.nativeEvent.coordinate;
-
-        const newRegion: LocationType = {
-            latitude,
-            longitude,
-            latitudeDelta: region.latitudeDelta,
-            longitudeDelta: region.longitudeDelta,
-        };
-        setRegion(newRegion);
-
-        const newGeolocation: LocationType = {
-            latitude,
-            longitude,
-            latitudeDelta: region.latitudeDelta,
-            longitudeDelta: region.longitudeDelta,
-        };
-        setMarkerPosition({ latitude, longitude });
-
-        onGeolocationChange(newGeolocation);
-    };
-
-    const handleMarkerDragEnd = (event: { nativeEvent: { coordinate: LatLng } }) => {
-        const { latitude, longitude } = event.nativeEvent.coordinate;
-
-        const newRegion: LocationType = {
-            latitude,
-            longitude,
-            latitudeDelta: region.latitudeDelta,
-            longitudeDelta: region.longitudeDelta,
-        };
-        setRegion(newRegion);
-
-        const newGeolocation: LocationType = {
-            latitude,
-            longitude,
-            latitudeDelta: region.latitudeDelta,
-            longitudeDelta: region.longitudeDelta,
-        };
-        setMarkerPosition({ latitude, longitude });
-
-        onGeolocationChange(newGeolocation);
-    };
+    const [markerPosition, setMarkerPosition] = useState<{ latitude: number, longitude: number } | null>(null);
 
     useEffect(() => {
-        if (!markerPosition) {
-            setMarkerPosition({ latitude: region.latitude, longitude: region.longitude });
-        }
-    }, [region, markerPosition]);
+        const getLocation = async () => {
+            const { status } = await Location.requestForegroundPermissionsAsync();
+
+            if (status === 'granted') {
+                const loc = await Location.getCurrentPositionAsync({});
+                setRegion({
+                    latitude: loc.coords.latitude,
+                    longitude: loc.coords.longitude,
+                    latitudeDelta: region.latitudeDelta,
+                    longitudeDelta: region.longitudeDelta,
+                });
+
+                setMarkerPosition({
+                    latitude: loc.coords.latitude,
+                    longitude: loc.coords.longitude,
+                });
+
+                const initialGeolocation: LocationType = {
+                    latitude: loc.coords.latitude,
+                    longitude: loc.coords.longitude,
+                    latitudeDelta: region.latitudeDelta,
+                    longitudeDelta: region.longitudeDelta,
+                };
+                onGeolocationChange(initialGeolocation);
+            } else {
+                alert("Permissão de localização negada");
+            }
+        };
+
+        getLocation();
+    }, []);
+
+    const handleRegionChange = (newRegion: Region) => {
+        setRegion({
+            latitude: newRegion.latitude,
+            longitude: newRegion.longitude,
+            latitudeDelta: newRegion.latitudeDelta,
+            longitudeDelta: newRegion.longitudeDelta,
+        });
+
+        setMarkerPosition({
+            latitude: newRegion.latitude,
+            longitude: newRegion.longitude,
+        });
+
+        const newGeolocation: LocationType = {
+            latitude: newRegion.latitude,
+            longitude: newRegion.longitude,
+            latitudeDelta: newRegion.latitudeDelta,
+            longitudeDelta: newRegion.longitudeDelta,
+        };
+
+        onGeolocationChange(newGeolocation);
+    };
 
     return (
         <View style={{ flex: 1 }}>
             <MapView
-                style={{ flex: 1, height: 400 }}
+                style={{ flex: 1 }}
                 region={region}
-                onRegionChangeComplete={setRegion}
-                onPress={handleMapPress}
+                onRegionChangeComplete={handleRegionChange}
+                showsUserLocation={true}
             >
                 {markerPosition && (
                     <Marker
                         coordinate={markerPosition}
-                        draggable
-                        onDragEnd={handleMarkerDragEnd}
                     />
                 )}
             </MapView>

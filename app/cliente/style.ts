@@ -74,6 +74,13 @@ export const RemoveButton = styled.TouchableOpacity`
   margin-left: 10px;
 `;
 
+export const BuyButton = styled.TouchableOpacity`
+  background-color: lightgreen;
+  padding: 8px;
+  border-radius: 5px;
+  margin-left: 10px;
+`;
+
 export const EmptyText = styled.Text`
   text-align: center;
   margin-top: 20px;
@@ -99,4 +106,53 @@ export const ButtonSearch = styled.TouchableOpacity`
   background-color: ${props => props.theme.colors.text};
   align-items: center;
   justify-content: center;
+`;
+
+
+
+export const ListEmptyText = styled.Text`
+  text-align: center;
+  margin-top: 20px;
+  font-size: 16px;
+  color: #6B6B6B;
+`;
+
+export const ModalContainer = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+`;
+
+export const ModalContent = styled.View`
+  width: 90%;
+  max-width: 400px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+`;
+
+export const ProductItem = styled.TouchableOpacity`
+  padding: 15px;
+  border-bottom-width: 1px;
+  border-bottom-color: #ccc;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const QuantitySelector = styled.View`
+  margin-top: 20px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+`;
+
+export const ButtonAddFooter = styled.View`
+  margin-top: 20px;
+  margin-bottom: 20px;
+  align-items: center;
 `;
