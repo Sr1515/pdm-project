@@ -25,6 +25,7 @@ interface ProductData {
     description: string;
 }
 
+
 const UpdateProduct = () => {
     const { id } = useLocalSearchParams<{ id: string }>();
     const [productPlaceholder, setProductPlaceholder] = useState<any>({});

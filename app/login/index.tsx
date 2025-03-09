@@ -5,12 +5,17 @@ import { router } from "expo-router";
 import Button from "@/components/Button";
 import Title from "@/components/Title";
 import Subtitle from "@/components/Subtitle";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/schemas/validation";
 import { TouchableOpacity } from "react-native";
 import FormInput from "@/components/Form";
 import { useWatch } from "react-hook-form";
+
+interface LoginFormData {
+    email: string;
+    password: string;
+}
 
 function Login() {
     const { login } = useAuth();
@@ -19,7 +24,7 @@ function Login() {
         control,
         handleSubmit,
         formState: { errors },
-    } = useForm({
+    } = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
             email: "",
@@ -34,7 +39,7 @@ function Login() {
     const isEmailValid = emailRegex.test(emailValue);
     const isPasswordValid = passwordValue?.length >= 6;
 
-    const onSubmit = async (data: any) => {
+    const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
         try {
             await login(data.email, data.password);
             router.replace("/home");

@@ -20,17 +20,25 @@ import { Controller, useForm } from "react-hook-form";
 import { api } from "@/api/axios";
 import { router } from "expo-router";
 import { ListEmptyText } from "../home/styles";
+interface Cliente {
+    _id: string;
+    name: string;
+    email: string;
+}
+interface Venda {
+    _id: string;
+    clienteId: string;
+}
 
 function Cliente() {
     const { tokenState } = useContext(AuthContext);
     const { control, handleSubmit, setValue, getValues } = useForm();
 
-    const [clientes, setClientes] = useState<any[]>([]);
-    const [filteredClientes, setFilteredClientes] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [clientes, setClientes] = useState<Cliente[]>([]);
+    const [filteredClientes, setFilteredClientes] = useState<Cliente[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const fetchClientes = async () => {
-
         if (!tokenState) {
             return;
         }
@@ -44,7 +52,6 @@ function Cliente() {
 
             setClientes(response.data);
             setFilteredClientes(response.data);
-
         } catch (error) {
             console.error("Erro ao buscar clientes:", error);
         } finally {
@@ -63,9 +70,7 @@ function Cliente() {
 
         if (searchTerm === "") {
             setFilteredClientes(clientes);
-
         } else {
-
             const filtered = clientes.filter((cliente) =>
                 cliente.name.toLowerCase().startsWith(searchTerm.toLowerCase())
             );
@@ -75,9 +80,7 @@ function Cliente() {
     };
 
     const deleteVendasByCliente = async (clienteId: string) => {
-
         try {
-
             const vendasResponse = await api.get(`/supply?clienteId=${clienteId}`, {
                 headers: {
                     Authorization: `Bearer ${tokenState}`,
@@ -85,21 +88,18 @@ function Cliente() {
             });
 
             for (let venda of vendasResponse.data) {
-
                 await api.delete(`/supply/${venda._id}`, {
                     headers: {
                         Authorization: `Bearer ${tokenState}`,
                     },
                 });
             }
-
         } catch (error) {
             console.error("Erro ao excluir vendas relacionadas ao cliente:", error);
         }
     };
 
     const handleDeleteCliente = async (clienteId: string) => {
-
         Alert.alert(
             "Excluir cliente",
             "Tem certeza que deseja excluir este cliente e todas as vendas associadas?",
@@ -111,7 +111,6 @@ function Cliente() {
                 {
                     text: "Excluir",
                     style: "destructive",
-
                     onPress: async () => {
                         try {
                             await deleteVendasByCliente(clienteId);
@@ -149,12 +148,10 @@ function Cliente() {
                 <Title>Gerenciamento de Clientes</Title>
 
                 <Form>
-
                     <Controller
                         name="searchTerm"
                         control={control}
                         defaultValue=""
-
                         render={({ field: { onChange, value } }) => (
                             <Input
                                 placeholder="Pesquise o nome de clientes"
@@ -163,13 +160,11 @@ function Cliente() {
                                 onChangeText={onChange}
                             />
                         )}
-
                     />
 
                     <ButtonSearch onPress={handleSearch}>
                         <Ionicons name="search-outline" size={32} color={"black"} />
                     </ButtonSearch>
-
                 </Form>
 
                 <Button onPress={handleNewCliente}>Adicionar Cliente</Button>
@@ -177,41 +172,32 @@ function Cliente() {
                 <TableContainer>
 
                     <TableHeader>
-
                         <HeaderText>Nome</HeaderText>
                         <HeaderText>Email</HeaderText>
                         <HeaderText>Opções</HeaderText>
-
                     </TableHeader>
 
                     {loading ? (
                         <ListEmptyText>Carregando...</ListEmptyText>
                     ) : (
-
                         <FlatList
                             data={filteredClientes}
                             keyExtractor={(item) => item._id}
                             showsVerticalScrollIndicator={false}
-
                             ListEmptyComponent={() => (
                                 <ListEmptyText>
                                     Nenhum cliente foi encontrado. Tente outra pesquisa.
                                 </ListEmptyText>
                             )}
-
                             renderItem={({ item }) => (
-
                                 <TableRow>
-
                                     <RowText>{item.name}</RowText>
                                     <RowText>{item.email}</RowText>
 
                                     <ActionsContainer>
-
                                         <RemoveButton onPress={() => handleDeleteCliente(item._id)}>
                                             <Ionicons name="trash-bin-outline" size={15} color={"white"} />
                                         </RemoveButton>
-
 
                                         <BuyButton onPress={() => router.push({
                                             pathname: "/gerenciadorVendas",
@@ -219,16 +205,12 @@ function Cliente() {
                                         })}>
                                             <Ionicons name="cart-outline" size={15} color={"white"} />
                                         </BuyButton>
-
                                     </ActionsContainer>
-
                                 </TableRow>
                             )}
                         />
                     )}
-
                 </TableContainer>
-
             </Container>
 
             <FooterMenu />

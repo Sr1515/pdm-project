@@ -7,21 +7,26 @@ import Title from "@/components/Title";
 import Button from "@/components/Button";
 import Config from "@/components/Config";
 import FormInput from "@/components/Form";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from "expo-router";
 import * as Location from 'expo-location';
 import { useWatch } from "react-hook-form";
 import { signUpSchema } from "@/schemas/validation";
 import { TouchableOpacity } from "react-native";
+interface SignUpFormData {
+    name: string;
+    email: string;
+    password: string;
+}
 
 type LocationData = Location.LocationObject | null;
 
 function SignUp() {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState<boolean>(false);
     const [location, setLocation] = useState<LocationData>(null);
 
-    const { control, handleSubmit, formState: { errors } } = useForm({
+    const { control, handleSubmit, formState: { errors } } = useForm<SignUpFormData>({
         resolver: zodResolver(signUpSchema),
         defaultValues: {
             name: "",
@@ -37,7 +42,7 @@ function SignUp() {
     const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
     const isPasswordValid = passwordValue.length >= 6;
 
-    const onSubmit = async (data: any) => {
+    const onSubmit: SubmitHandler<SignUpFormData> = async (data) => {
         setLoading(true);
 
         try {
@@ -54,7 +59,6 @@ function SignUp() {
             if (response.status === 201) {
                 alert("Cadastro bem-sucedido!");
                 router.replace("/login");
-
             } else {
                 alert("Erro ao cadastrar, tente novamente.");
             }
@@ -67,14 +71,12 @@ function SignUp() {
     };
 
     useEffect(() => {
-
         const getLocation = async () => {
             const { status } = await Location.requestForegroundPermissionsAsync();
 
             if (status === 'granted') {
                 const loc = await Location.getCurrentPositionAsync({});
                 setLocation(loc);
-
             } else {
                 alert("Permissão de localização negada");
             }
@@ -152,7 +154,7 @@ function SignUp() {
 
             </Container>
 
-        </Config >
+        </Config>
     );
 }
 

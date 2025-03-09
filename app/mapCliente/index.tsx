@@ -15,12 +15,19 @@ interface LocationType {
     latitudeDelta: number;
     longitudeDelta: number;
 }
+interface Client {
+    _id: string;
+    name: string;
+    address: {
+        coordinates: [number, number];
+    };
+}
 
 function MapCliente() {
     const { tokenState } = useContext(AuthContext);
-    const [clientes, setClientes] = useState<any[]>([]);
+    const [clientes, setClientes] = useState<Client[]>([]);
     const [userLocation, setUserLocation] = useState<LocationType | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const getUserLocation = async () => {
         const { status } = await Location.requestForegroundPermissionsAsync();
@@ -40,6 +47,7 @@ function MapCliente() {
         }
     };
 
+
     const fetchClientes = async () => {
         if (!tokenState) return;
 
@@ -57,11 +65,12 @@ function MapCliente() {
         }
     };
 
+
     useEffect(() => {
         const fetchData = async () => {
             await fetchClientes();
             await getUserLocation();
-            console.log(JSON.stringify(clientes))
+            console.log(JSON.stringify(clientes));
         };
 
         fetchData();

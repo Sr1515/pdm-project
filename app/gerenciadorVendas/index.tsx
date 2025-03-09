@@ -25,20 +25,31 @@ import { useLocalSearchParams } from 'expo-router';
 import { api } from "@/api/axios";
 import { AuthContext } from "@/context/AuthProvider";
 
+interface Product {
+    _id: string;
+    name: string;
+    price: number;
+    ammount: number;
+}
+interface SaleItem extends Product {
+    quantidade: number;
+    precoTotal: number;
+}
+
 function GerenciadorVendas() {
     const { tokenState } = useContext(AuthContext);
     const { id } = useLocalSearchParams<{ id: string }>();
-    const [produtos, setProdutos] = useState<any[]>([]);
-    const [itensVenda, setItensVenda] = useState<any[]>([]);
-    const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
+    const [produtos, setProdutos] = useState<Product[]>([]);
+    const [itensVenda, setItensVenda] = useState<SaleItem[]>([]);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [quantidade, setQuantidade] = useState<number>(1);
     const [modalProdutosVisible, setModalProdutosVisible] = useState<boolean>(false);
     const [modalQuantidadeVisible, setModalQuantidadeVisible] = useState<boolean>(false);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState<boolean>(true);
     const router = useRouter();
 
-    useEffect(() => {
 
+    useEffect(() => {
         const fetchProdutos = async () => {
             try {
                 const response = await api.get("/own-products", {
@@ -56,32 +67,28 @@ function GerenciadorVendas() {
         };
 
         fetchProdutos();
+    }, [tokenState]);
 
-    }, []);
 
     const handleAdicionarProduto = async () => {
-
         if (!selectedProduct) {
             Alert.alert("Erro", "Selecione um produto");
             return;
         }
 
         const produto = produtos.find((p) => p._id === selectedProduct._id);
-
         if (!produto) {
             Alert.alert("Erro", "Produto não encontrado");
             return;
         }
 
         const quantidadeDisponivel = produto.ammount;
-
         if (quantidade > quantidadeDisponivel) {
             Alert.alert("Erro", `Quantidade indisponível. Disponível: ${quantidadeDisponivel}`);
             return;
         }
 
         const produtoExistente = itensVenda.find((item) => item._id === selectedProduct._id);
-
         if (produtoExistente) {
             const updatedItens = itensVenda.map((item) =>
                 item._id === selectedProduct._id
@@ -92,11 +99,8 @@ function GerenciadorVendas() {
                     }
                     : item
             );
-
             setItensVenda(updatedItens);
-
         } else {
-
             setItensVenda([
                 ...itensVenda,
                 {
@@ -105,7 +109,6 @@ function GerenciadorVendas() {
                     precoTotal: selectedProduct.price * quantidade,
                 },
             ]);
-
         }
 
         setSelectedProduct(null);
@@ -118,10 +121,10 @@ function GerenciadorVendas() {
         setItensVenda(itensVenda.filter((item) => item._id !== produtoId));
     };
 
+
     const handleFinalizarCompra = async () => {
         try {
             const venda = { person_id: id };
-
             const products = itensVenda.map(item => ({
                 product_id: item._id,
                 quantity: item.quantidade,
@@ -132,7 +135,7 @@ function GerenciadorVendas() {
                 products,
             };
 
-            const vendaResponse = await api.post("/supply", vendaFormated, {
+            await api.post("/supply", vendaFormated, {
                 headers: {
                     Authorization: `Bearer ${tokenState}`,
                 },
@@ -141,20 +144,16 @@ function GerenciadorVendas() {
 
             for (const item of itensVenda) {
                 const produto = produtos.find((p) => p._id === item._id);
-
                 if (produto) {
-
                     const ammountAfterPurchase = Number(produto.ammount) - Number(item.quantidade);
-
                     try {
-                        const response = await api.put(`/product/${item._id}`, {
+                        await api.put(`/product/${item._id}`, {
                             "ammount": ammountAfterPurchase
                         }, {
                             headers: {
                                 Authorization: `Bearer ${tokenState}`,
                             },
                         });
-
                     } catch (error) {
                         console.error(`Erro ao atualizar o estoque do produto ${produto.name}:`, error);
                         Alert.alert("Erro", `Falha ao atualizar o estoque para o produto ${produto.name}.`);
@@ -165,22 +164,16 @@ function GerenciadorVendas() {
 
             Alert.alert("Sucesso", "Compra realizada com sucesso");
             router.push("/home");
-
         } catch (error) {
             console.error("Erro ao finalizar compra:", error);
             Alert.alert("Erro", "Não foi possível finalizar a compra");
         }
     };
 
-
-
     return (
         <Config>
-
             <Container>
-
                 <Title>Gerenciador de Vendas</Title>
-
                 <ButtonAdd>
                     <Button onPress={() => setModalProdutosVisible(true)}>
                         Adicionar Produto
@@ -279,7 +272,6 @@ function GerenciadorVendas() {
             </Container>
 
             <FooterMenu />
-
         </Config>
     );
 }

@@ -16,23 +16,32 @@ import Config from "@/components/Config";
 import { AuthContext } from "@/context/AuthProvider";
 import { api } from "@/api/axios";
 import { ListEmptyText } from "../home/styles";
-import { router } from "expo-router";
-import Button from "@/components/Button";
+
+interface Product {
+    product: {
+        name: string;
+    };
+}
+interface Venda {
+    _id: string;
+    person: {
+        name: string;
+    };
+    products: Product[];
+}
 
 function Venda() {
     const { tokenState } = useContext(AuthContext);
 
-    const [vendas, setVendas] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [vendas, setVendas] = useState<Venda[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
-    const fetchVendas = async () => {
-
+    const fetchVendas = async (): Promise<void> => {
         if (!tokenState) {
             return;
         }
 
         try {
-
             const response = await api.get("/supply", {
                 headers: {
                     Authorization: `Bearer ${tokenState}`,
@@ -48,8 +57,7 @@ function Venda() {
         }
     };
 
-    const handleRemoveVenda = (vendaId: string) => {
-
+    const handleRemoveVenda = (vendaId: string): void => {
         Alert.alert(
             "Confirmar Exclusão",
             "Tem certeza de que deseja excluir esta venda?",
@@ -60,14 +68,12 @@ function Venda() {
                 },
                 {
                     text: "Excluir",
-
                     onPress: async () => {
                         if (!tokenState) {
                             return;
                         }
 
                         try {
-
                             const response = await api.delete(`/supply/${vendaId}`, {
                                 headers: {
                                     Authorization: `Bearer ${tokenState}`,
@@ -123,8 +129,7 @@ function Venda() {
                                 </ListEmptyText>
                             )}
 
-                            renderItem={({ item }) => (
-
+                            renderItem={({ item }: { item: Venda }) => (
                                 <TableRow>
 
                                     <RowText>{item.person.name}</RowText>
@@ -143,7 +148,6 @@ function Venda() {
                                     </ActionsContainer>
 
                                 </TableRow>
-
                             )}
                         />
                     )}

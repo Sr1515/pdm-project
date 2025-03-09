@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { FlatList, Alert } from 'react-native';
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 
 import {
   Container, Form, Input,
@@ -26,14 +26,26 @@ import { router } from "expo-router";
 import { api } from '@/api/axios';
 import { ProductImageShow } from '@/components/ProductImage';
 
+interface Product {
+  _id: string;
+  name: string;
+  ammount: number;
+  price: number;
+  description: string;
+}
+
+interface SearchFormData {
+  searchTerm: string;
+}
 
 function Home() {
   const { tokenState } = useContext(AuthContext);
-  const { control, handleSubmit, setValue, getValues } = useForm();
+  const { control, handleSubmit, setValue, getValues } = useForm<SearchFormData>();
 
-  const [products, setProducts] = useState<any[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
 
   const fetchProducts = async () => {
     if (!tokenState) {
@@ -41,7 +53,6 @@ function Home() {
     }
 
     try {
-
       const response = await api.get("/own-products", {
         headers: {
           Authorization: `Bearer ${tokenState}`
@@ -58,21 +69,20 @@ function Home() {
     }
   };
 
+
   useEffect(() => {
     if (tokenState) {
       fetchProducts();
     }
   }, [tokenState]);
 
+
   const handleSearch = () => {
     const searchTerm = getValues("searchTerm");
 
     if (searchTerm === "") {
-
       setFilteredProducts(products);
-    }
-    else {
-
+    } else {
       const filtered = products.filter((product) =>
         product.name.toLowerCase().startsWith(searchTerm.toLowerCase())
       );
@@ -83,7 +93,6 @@ function Home() {
 
 
   const handleDeleteProduct = async (productId: string) => {
-
     Alert.alert(
       "Excluir produto",
       "Tem certeza que deseja excluir este produto?",
@@ -95,27 +104,20 @@ function Home() {
         {
           text: "Excluir",
           style: "destructive",
-
           onPress: async () => {
-
             try {
-
               await api.delete(`/product/${productId}`, {
                 headers: {
                   Authorization: `Bearer ${tokenState}`
-
                 }
               });
 
               setProducts((prevProducts) =>
                 prevProducts.filter((product) => product._id !== productId)
-
               );
               setFilteredProducts((prevFilteredProducts) =>
                 prevFilteredProducts.filter((product) => product._id !== productId)
-
               );
-
             } catch (error) {
               console.error("Erro ao excluir produto:", error);
             }
@@ -124,6 +126,7 @@ function Home() {
       ]
     );
   };
+
 
   const handleNewProduct = () => {
     router.replace('/addProduct');
@@ -158,15 +161,12 @@ function Home() {
 
         </Form>
 
-
         <Button onPress={handleNewProduct}>Novo item</Button>
-
 
         {loading ? (
           <ListEmptyText>Carregando...</ListEmptyText>
         ) : (
           <FlatList
-
             data={filteredProducts}
             keyExtractor={(item) => item._id}
             showsVerticalScrollIndicator={false}
@@ -175,7 +175,6 @@ function Home() {
                 Nenhum produto foi encontrado. Tente outra pesquisa.
               </ListEmptyText>
             )}
-
             renderItem={({ item }) => (
               <ProductItem>
 
@@ -186,7 +185,6 @@ function Home() {
                   <ProductDescription>{`Qtd: ${item.ammount} unidades`}</ProductDescription>
                   <ProductPrice>{`R$: ${item.price} reais (unidade)`}</ProductPrice>
                   <ProductDescription>{`Descrição: ${item.description}`}</ProductDescription>
-
                 </ProductInfo>
 
                 <ButtonContainer>
@@ -204,7 +202,6 @@ function Home() {
 
               </ProductItem>
             )}
-
           />
         )}
 
@@ -217,5 +214,3 @@ function Home() {
 }
 
 export default Home;
-
-

@@ -18,7 +18,7 @@ import ImagePickerComponent from "@/components/ImagePickerComponent";
 import { AuthContext } from "@/context/AuthProvider";
 import { api } from "@/api/axios";
 import { router } from "expo-router";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 interface ProductData {
     productName: string;
@@ -31,7 +31,7 @@ interface ProductData {
 }
 
 const AddProduct = () => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState<boolean>(false);
     const { tokenState } = useContext(AuthContext);
     const [image, setImage] = useState<string | null>(null);
 
@@ -93,39 +93,33 @@ const AddProduct = () => {
         }
 
         try {
-
             const productData = {
-                "name": data.productName,
-                "description": data.description,
-                "ammount": ammount,
-                "type": data.productType,
-                "price": price,
-                "manufacturing_date": formattedManufacturingDate,
-                "expiration_date": formattedExpiryDate,
-                "image": ""
-            }
+                name: data.productName,
+                description: data.description,
+                ammount: ammount,
+                type: data.productType,
+                price: price,
+                manufacturing_date: formattedManufacturingDate,
+                expiration_date: formattedExpiryDate,
+                image: ""
+            };
 
-
-            const productResponse = await api.post("/product", productData, {
+            const productResponse: AxiosResponse = await api.post("/product", productData, {
                 headers: {
                     Authorization: `Bearer ${tokenState}`,
                 },
             });
 
-
             if (productResponse.status === 201) {
-
                 if (image) {
+                    const formData = new FormData();
+                    formData.append('file', {
+                        name: "imagem.jpeg",
+                        type: "image/jpeg",
+                        uri: image
+                    } as any);
 
-                    const data = new FormData();
-
-                    data.append('file', {
-                        "name": "imagem.jpeg",
-                        "type": "image/jpeg",
-                        "uri": image
-                    } as any)
-
-                    const imageResponse = await api.patch(`/product/${productResponse.data.id}`, data, {
+                    const imageResponse: AxiosResponse = await api.patch(`/product/${productResponse.data.id}`, formData, {
                         headers: {
                             "Content-Type": "multipart/form-data",
                             Authorization: `Bearer ${tokenState}`,
@@ -164,21 +158,17 @@ const AddProduct = () => {
         const date = new Date(year, month, day);
         const currentDate = new Date();
 
-        const currentYear = currentDate.getFullYear();
-        const currentMonth = currentDate.getMonth();
-        const currentDay = currentDate.getDate();
-
-
         if (
-            date.getFullYear() < currentYear ||
-            (date.getFullYear() === currentYear && (date.getMonth() < currentMonth || (date.getMonth() === currentMonth && date.getDate() < currentDay)))
+            date.getFullYear() < currentDate.getFullYear() ||
+            (date.getFullYear() === currentDate.getFullYear() &&
+                (date.getMonth() < currentDate.getMonth() ||
+                    (date.getMonth() === currentDate.getMonth() && date.getDate() < currentDate.getDate())))
         ) {
             return false;
         }
 
         return true;
     };
-
 
     const isValidDate = (dateStr: string): Date | null => {
         const parts = dateStr.split('/');
@@ -196,7 +186,6 @@ const AddProduct = () => {
 
         return null;
     };
-
 
     const handleImagePicked = (uri: string) => {
         setImage(uri);
