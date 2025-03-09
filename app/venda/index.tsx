@@ -86,10 +86,6 @@ function Venda() {
         );
     };
 
-    const handleNewVenda = () => {
-        router.replace('/gerenciadorVendas');
-    };
-
     useEffect(() => {
         if (tokenState) {
             fetchVendas();
@@ -104,8 +100,6 @@ function Venda() {
                 <Title>Histórico de Vendas</Title>
 
                 <TableContainer>
-
-                    <Button onPress={handleNewVenda}>Nova venda</Button>
 
                     <TableHeader>
 

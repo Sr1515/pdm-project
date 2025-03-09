@@ -77,7 +77,7 @@ const AddProduct = () => {
             return;
         }
 
-        if (data.expiryDate && !formattedExpiryDate) {
+        if (data.expiryDate && !formattedExpiryDateFuture) {
             Alert.alert("Erro", "Data de validade inválida.");
             setLoading(false);
             return;

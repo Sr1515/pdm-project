@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View } from "react-native";
+import { View, Text, ActivityIndicator, Button } from "react-native";
 import MapView, { Marker, Region } from "react-native-maps";
 import * as Location from 'expo-location';
 
@@ -23,6 +23,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ onGeolocationChange }) => {
     });
 
     const [markerPosition, setMarkerPosition] = useState<{ latitude: number, longitude: number } | null>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const getLocation = async () => {
@@ -30,27 +31,25 @@ const MapComponent: React.FC<MapComponentProps> = ({ onGeolocationChange }) => {
 
             if (status === 'granted') {
                 const loc = await Location.getCurrentPositionAsync({});
-                setRegion({
-                    latitude: loc.coords.latitude,
-                    longitude: loc.coords.longitude,
-                    latitudeDelta: region.latitudeDelta,
-                    longitudeDelta: region.longitudeDelta,
-                });
-
-                setMarkerPosition({
-                    latitude: loc.coords.latitude,
-                    longitude: loc.coords.longitude,
-                });
-
-                const initialGeolocation: LocationType = {
+                const currentLocation = {
                     latitude: loc.coords.latitude,
                     longitude: loc.coords.longitude,
                     latitudeDelta: region.latitudeDelta,
                     longitudeDelta: region.longitudeDelta,
                 };
-                onGeolocationChange(initialGeolocation);
+
+                setRegion(currentLocation);
+                setMarkerPosition({
+                    latitude: loc.coords.latitude,
+                    longitude: loc.coords.longitude,
+                });
+
+                onGeolocationChange(currentLocation);
+
+                setLoading(false);
             } else {
                 alert("Permissão de localização negada");
+                setLoading(false);
             }
         };
 
@@ -80,6 +79,49 @@ const MapComponent: React.FC<MapComponentProps> = ({ onGeolocationChange }) => {
         onGeolocationChange(newGeolocation);
     };
 
+    const handleMarkerDragEnd = (e: any) => {
+        const { latitude, longitude } = e.nativeEvent.coordinate;
+        setMarkerPosition({
+            latitude,
+            longitude,
+        });
+
+
+        const newGeolocation: LocationType = {
+            latitude,
+            longitude,
+            latitudeDelta: region.latitudeDelta,
+            longitudeDelta: region.longitudeDelta,
+        };
+
+        onGeolocationChange(newGeolocation);
+    };
+
+
+    const handleGetPosition = () => {
+        if (markerPosition) {
+            const newGeolocation: LocationType = {
+                latitude: markerPosition.latitude,
+                longitude: markerPosition.longitude,
+                latitudeDelta: region.latitudeDelta,
+                longitudeDelta: region.longitudeDelta,
+            };
+            onGeolocationChange(newGeolocation);
+            alert(`Localização capturada: \nLatitude: ${markerPosition.latitude}\nLongitude: ${markerPosition.longitude}`);
+        } else {
+            alert("Por favor, mova o marcador para a localização correta primeiro.");
+        }
+    };
+
+    if (loading) {
+        return (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <ActivityIndicator size="large" color="#0000ff" />
+                <Text>Carregando localização...</Text>
+            </View>
+        );
+    }
+
     return (
         <View style={{ flex: 1 }}>
             <MapView
@@ -91,10 +133,22 @@ const MapComponent: React.FC<MapComponentProps> = ({ onGeolocationChange }) => {
                 {markerPosition && (
                     <Marker
                         coordinate={markerPosition}
+                        draggable
+                        onDragEnd={handleMarkerDragEnd}
                     />
                 )}
             </MapView>
-        </View>
+
+            <View style={{
+                position: 'absolute',
+                bottom: 0,
+                width: '100%',
+                left: '22%',
+                transform: [{ translateX: -75 }],
+            }}>
+                <Button title="Capturar Localização" onPress={handleGetPosition} />
+            </View>
+        </View >
     );
 };
 

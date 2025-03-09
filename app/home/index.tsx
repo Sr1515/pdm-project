@@ -183,7 +183,7 @@ function Home() {
 
                 <ProductInfo>
                   <ProductText>{`Produto: ${item.name}`}</ProductText>
-                  <ProductDescription>{`Qtd: ${item.price} unidades`}</ProductDescription>
+                  <ProductDescription>{`Qtd: ${item.ammount} unidades`}</ProductDescription>
                   <ProductPrice>{`R$: ${item.price} reais (unidade)`}</ProductPrice>
                   <ProductDescription>{`Descrição: ${item.description}`}</ProductDescription>
 

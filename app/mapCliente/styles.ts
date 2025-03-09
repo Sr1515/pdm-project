@@ -12,7 +12,7 @@ export const Container = styled.View`
 export const StyledMapView = styled(MapView)`
   margin-left: 20px;
   margin-right: 20px;
-  height: 70%;
+  height: 84%;
 `;
 
 export const ButtonClientes = styled.View`

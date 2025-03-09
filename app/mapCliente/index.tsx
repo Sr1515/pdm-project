@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Marker } from "react-native-maps";
-import { ButtonClientes, Container, StyledMapView } from "./styles";
-import Button from "@/components/Button";
+import { Container, StyledMapView } from "./styles";
 import Title from "@/components/Title";
 import FooterMenu from "@/components/FooterMenu";
 import Config from "@/components/Config";
 import * as Location from "expo-location";
 import { api } from "@/api/axios";
 import { AuthContext } from "@/context/AuthProvider";
-import { router } from "expo-router";
+import { Text } from "react-native";
 
 interface LocationType {
     latitude: number;
@@ -23,7 +22,6 @@ function MapCliente() {
     const [userLocation, setUserLocation] = useState<LocationType | null>(null);
     const [loading, setLoading] = useState(true);
 
-    // Função para obter a localização do usuário
     const getUserLocation = async () => {
         const { status } = await Location.requestForegroundPermissionsAsync();
 
@@ -42,7 +40,6 @@ function MapCliente() {
         }
     };
 
-    // Função para buscar os clientes
     const fetchClientes = async () => {
         if (!tokenState) return;
 
@@ -60,53 +57,46 @@ function MapCliente() {
         }
     };
 
-    // Efeito para obter a localização e os clientes na primeira carga
     useEffect(() => {
-        if (tokenState) {
-            getUserLocation(); // Buscar localização do usuário
-            fetchClientes(); // Buscar clientes
-        }
-    }, [tokenState]);
+        const fetchData = async () => {
+            await fetchClientes();
+            await getUserLocation();
+            console.log(JSON.stringify(clientes))
+        };
 
-    // Função para atualizar o mapa
-    const handleAtualizarMapa = async () => {
-        setLoading(true); // Define que está carregando novamente
-        await fetchClientes(); // Recarrega os dados dos clientes
-        await getUserLocation(); // Recarrega a localização do usuário
-        setLoading(false); // Finaliza o carregamento
-    };
+        fetchData();
+    }, [tokenState]);
 
     return (
         <Config>
             <Container>
+
                 <Title>Encontre seus clientes</Title>
 
-                {/* Renderizando o mapa com os dados dos clientes */}
-                <StyledMapView>
+                {userLocation ? (
+                    <StyledMapView region={userLocation}>
+                        {clientes.length > 0 ? (
+                            clientes.map((client) => (
+                                <Marker
+                                    key={client._id}
+                                    coordinate={{
+                                        latitude: client.address.coordinates[0],
+                                        longitude: client.address.coordinates[1],
+                                    }}
+                                    title={client.name}
+                                    description={`ID: ${client._id}`}
+                                />
+                            ))
+                        ) : loading ? (
+                            <Text>Carregando clientes...</Text>
+                        ) : (
+                            <Text>Nenhum cliente encontrado</Text>
+                        )}
+                    </StyledMapView>
 
-                    {/* Verificando se há clientes e renderizando os markers */}
-                    {clientes.map((client) => {
-                        const latitude = client.address.coordinates[1];
-                        const longitude = client.address.coordinates[0];
-                        return (
-                            <Marker
-                                key={client._id}
-                                coordinate={{
-                                    latitude,
-                                    longitude,
-                                }}
-                                title={client.name}
-                                description={`ID: ${client._id}`}
-                            />
-                        );
-                    })}
-
-                </StyledMapView>
-
-                {/* Botão para atualizar o mapa */}
-                <ButtonClientes>
-                    <Button onPress={handleAtualizarMapa}>Atualizar Mapa</Button>
-                </ButtonClientes>
+                ) : (
+                    <Text>Carregando mapa...</Text>
+                )}
 
             </Container>
 
