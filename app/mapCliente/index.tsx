@@ -26,7 +26,6 @@ interface Client {
 
 function MapCliente() {
     const { checkToken } = useAuth();
-
     checkToken();
 
     const { tokenState } = useContext(AuthContext);

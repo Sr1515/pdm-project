@@ -25,9 +25,7 @@ type LocationData = Location.LocationObject | null;
 
 function SignUp() {
     const { checkToken } = useAuth();
-
-    checkToken();
-
+    checkToken("/home");
 
     const [loading, setLoading] = useState<boolean>(false);
     const [location, setLocation] = useState<LocationData>(null);

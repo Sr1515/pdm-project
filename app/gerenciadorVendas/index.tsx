@@ -39,9 +39,7 @@ interface SaleItem extends Product {
 
 function GerenciadorVendas() {
     const { checkToken } = useAuth();
-
     checkToken();
-
 
     const { tokenState } = useContext(AuthContext);
     const { id } = useLocalSearchParams<{ id: string }>();

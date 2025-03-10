@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from 'react';
 import React from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
-import { router } from 'expo-router';
+import { Href, router } from 'expo-router';
 import { api } from '@/api/axios';
 
 interface IContexto {
@@ -75,22 +75,33 @@ export function AuthProviderContext({ children }: IProps) {
         })();
     }, []);
 
-    function checkToken() {
+    function checkToken(namePage: Href) {
         useEffect(() => {
             (async () => {
+                console.log("Entrei")
                 const tokenStorage = await AsyncStorage.getItem('token');
-                try {
-                    const data = await api.get("/", {
-                        headers: {
-                            Authorization: `Bearer ${tokenStorage}`
-                        }
-                    })
-                    if (data.status) router.replace("/home")
 
+                if (tokenStorage && tokenStorage !== null) {
+                    try {
+                        const data = await api.get("/", {
+                            headers: {
+                                Authorization: `Bearer ${tokenStorage}`,
+                            },
+                        });
+
+                        if (data && data.status === 200) {
+                            if (!namePage) {
+                                return
+                            }
+
+                            router.replace(namePage);
+                        }
+                    } catch (e) {
+                        console.error("Erro ao verificar o token:", e);
+                        router.replace("/login");
+                    }
                 }
-                catch (e) {
-                    router.replace("/login")
-                }
+
             })()
         }, [])
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Container, ContainerLogin, TextContainer, TextAbout, TextRedirect } from "./styles";
 import { useAuth } from "@/hooks/useAuth";
 import { router } from "expo-router";
@@ -20,7 +20,7 @@ interface LoginFormData {
 function Login() {
     const { login, checkToken } = useAuth();
 
-    checkToken();
+    checkToken("/home");
 
     const {
         control,

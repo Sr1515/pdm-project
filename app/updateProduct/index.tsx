@@ -29,7 +29,6 @@ interface ProductData {
 
 const UpdateProduct = () => {
     const { checkToken } = useAuth();
-
     checkToken();
 
     const { id } = useLocalSearchParams<{ id: string }>();

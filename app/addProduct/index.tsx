@@ -33,9 +33,7 @@ interface ProductData {
 
 const AddProduct = () => {
     const { checkToken } = useAuth();
-
     checkToken();
-
 
     const [loading, setLoading] = useState<boolean>(false);
     const { tokenState } = useContext(AuthContext);

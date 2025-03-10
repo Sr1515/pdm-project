@@ -33,7 +33,6 @@ interface Venda {
 
 function Cliente() {
     const { checkToken } = useAuth();
-
     checkToken();
 
     const { tokenState } = useContext(AuthContext);

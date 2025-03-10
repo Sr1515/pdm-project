@@ -16,6 +16,7 @@ import Config from "@/components/Config";
 import { AuthContext } from "@/context/AuthProvider";
 import { api } from "@/api/axios";
 import { ListEmptyText } from "../home/styles";
+import { useAuth } from "@/hooks/useAuth";
 
 interface Product {
     product: {
@@ -32,6 +33,9 @@ interface Venda {
 }
 
 function Venda() {
+    const { checkToken } = useAuth();
+    checkToken();
+
     const { tokenState } = useContext(AuthContext);
 
     const [vendas, setVendas] = useState<Venda[]>([]);
@@ -49,7 +53,7 @@ function Venda() {
                 },
             });
 
-            // Filtra vendas com dados incompletos
+
             const filteredVendas = response.data.filter((venda: Venda) =>
                 venda.person && venda.person.name && venda.products && venda.products.length > 0
             );

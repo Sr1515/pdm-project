@@ -40,7 +40,7 @@ interface ClientFormData {
 function AddClient() {
     const { checkToken } = useAuth();
 
-    checkToken();
+    checkToken("/addCliente");
 
     const [loading, setLoading] = useState<boolean>(false);
     const { tokenState } = useContext(AuthContext);
