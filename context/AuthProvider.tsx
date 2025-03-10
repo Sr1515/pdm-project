@@ -3,11 +3,13 @@ import React from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import { router } from 'expo-router';
+import { api } from '@/api/axios';
 
 interface IContexto {
     tokenState: string | null;
     login: (email: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
+    checkToken: Function
 }
 
 export const AuthContext = createContext({} as IContexto);
@@ -23,7 +25,7 @@ export function AuthProviderContext({ children }: IProps) {
         const dados = { email, password };
 
         try {
-            const response = await axios.post('http://192.168.2.103:3000/auth', dados);
+            const response = await axios.post('http://192.168.137.1:3000/auth', dados);
 
             console.log(response.data)
 
@@ -73,8 +75,31 @@ export function AuthProviderContext({ children }: IProps) {
         })();
     }, []);
 
+    function checkToken() {
+        useEffect(() =>{
+            (async () => {
+                const tokenStorage = await AsyncStorage.getItem('token');
+                try {
+                    const data = await api.get("/", {
+                        headers:{
+                            Authorization: `Bearer ${tokenStorage}`
+                        }
+                    })
+                    if(data.status) router.replace("/home")
+
+                }
+                catch(e){
+                    router.replace("/login")
+                }
+                
+
+            })()
+        },[])
+        
+    }
+
     return (
-        <AuthContext.Provider value={{ tokenState, login, logout }}>
+        <AuthContext.Provider value={{ tokenState, login, logout, checkToken }}>
             {children}
         </AuthContext.Provider>
     );
