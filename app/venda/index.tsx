@@ -22,6 +22,7 @@ interface Product {
         name: string;
     };
 }
+
 interface Venda {
     _id: string;
     person: {
@@ -48,7 +49,12 @@ function Venda() {
                 },
             });
 
-            setVendas(response.data);
+            // Filtra vendas com dados incompletos
+            const filteredVendas = response.data.filter((venda: Venda) =>
+                venda.person && venda.person.name && venda.products && venda.products.length > 0
+            );
+
+            setVendas(filteredVendas);
 
         } catch (error) {
             console.error("Erro ao buscar as vendas:", error);
@@ -125,17 +131,18 @@ function Venda() {
 
                             ListEmptyComponent={() => (
                                 <ListEmptyText>
-                                    Nenhum produto foi adicionado ainda. Adicione um!
+                                    Nenhuma venda encontrada.
                                 </ListEmptyText>
                             )}
 
                             renderItem={({ item }: { item: Venda }) => (
                                 <TableRow>
 
-                                    <RowText>{item.person.name}</RowText>
+                                    <RowText>{item.person?.name || "Nome não disponível"}</RowText>
+
                                     <RowText>
                                         {item.products.length > 0
-                                            ? `${[item.products[0].product.name + " " + '...']}${item.products.length > 1 ? '...' : ''}`
+                                            ? `${item.products[0]?.product?.name || "..."} ${item.products.length > 1 ? '...' : ''}`
                                             : "Sem produtos"}
                                     </RowText>
 

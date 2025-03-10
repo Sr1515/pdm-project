@@ -25,7 +25,7 @@ export function AuthProviderContext({ children }: IProps) {
         const dados = { email, password };
 
         try {
-            const response = await axios.post('http://192.168.137.1:3000/auth', dados);
+            const response = await api.post('/auth', dados);
 
             console.log(response.data)
 
@@ -76,26 +76,24 @@ export function AuthProviderContext({ children }: IProps) {
     }, []);
 
     function checkToken() {
-        useEffect(() =>{
+        useEffect(() => {
             (async () => {
                 const tokenStorage = await AsyncStorage.getItem('token');
                 try {
                     const data = await api.get("/", {
-                        headers:{
+                        headers: {
                             Authorization: `Bearer ${tokenStorage}`
                         }
                     })
-                    if(data.status) router.replace("/home")
+                    if (data.status) router.replace("/home")
 
                 }
-                catch(e){
+                catch (e) {
                     router.replace("/login")
                 }
-                
-
             })()
-        },[])
-        
+        }, [])
+
     }
 
     return (

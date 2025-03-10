@@ -14,6 +14,7 @@ import * as Location from 'expo-location';
 import { useWatch } from "react-hook-form";
 import { signUpSchema } from "@/schemas/validation";
 import { TouchableOpacity } from "react-native";
+import { useAuth } from "@/hooks/useAuth";
 interface SignUpFormData {
     name: string;
     email: string;
@@ -23,6 +24,11 @@ interface SignUpFormData {
 type LocationData = Location.LocationObject | null;
 
 function SignUp() {
+    const { checkToken } = useAuth();
+
+    checkToken();
+
+
     const [loading, setLoading] = useState<boolean>(false);
     const [location, setLocation] = useState<LocationData>(null);
 

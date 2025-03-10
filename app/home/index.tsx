@@ -25,6 +25,7 @@ import { router } from "expo-router";
 
 import { api } from '@/api/axios';
 import { ProductImageShow } from '@/components/ProductImage';
+import { useAuth } from '@/hooks/useAuth';
 
 interface Product {
   _id: string;
@@ -39,6 +40,10 @@ interface SearchFormData {
 }
 
 function Home() {
+  const { checkToken } = useAuth();
+
+  checkToken();
+
   const { tokenState } = useContext(AuthContext);
   const { control, handleSubmit, setValue, getValues } = useForm<SearchFormData>();
 

@@ -20,7 +20,7 @@ interface LoginFormData {
 function Login() {
     const { login, checkToken } = useAuth();
 
-    checkToken()
+    checkToken();
 
     const {
         control,

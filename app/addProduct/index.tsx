@@ -19,6 +19,7 @@ import { AuthContext } from "@/context/AuthProvider";
 import { api } from "@/api/axios";
 import { router } from "expo-router";
 import axios, { AxiosResponse } from "axios";
+import { useAuth } from "@/hooks/useAuth";
 
 interface ProductData {
     productName: string;
@@ -31,6 +32,11 @@ interface ProductData {
 }
 
 const AddProduct = () => {
+    const { checkToken } = useAuth();
+
+    checkToken();
+
+
     const [loading, setLoading] = useState<boolean>(false);
     const { tokenState } = useContext(AuthContext);
     const [image, setImage] = useState<string | null>(null);

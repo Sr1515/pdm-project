@@ -8,6 +8,7 @@ import * as Location from "expo-location";
 import { api } from "@/api/axios";
 import { AuthContext } from "@/context/AuthProvider";
 import { Text } from "react-native";
+import { useAuth } from "@/hooks/useAuth";
 
 interface LocationType {
     latitude: number;
@@ -24,6 +25,10 @@ interface Client {
 }
 
 function MapCliente() {
+    const { checkToken } = useAuth();
+
+    checkToken();
+
     const { tokenState } = useContext(AuthContext);
     const [clientes, setClientes] = useState<Client[]>([]);
     const [userLocation, setUserLocation] = useState<LocationType | null>(null);

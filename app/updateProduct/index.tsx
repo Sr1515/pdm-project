@@ -14,6 +14,7 @@ import { AuthContext } from "@/context/AuthProvider";
 import { api } from "@/api/axios";
 import { router, useLocalSearchParams } from "expo-router";
 import axios from "axios";
+import { useAuth } from "@/hooks/useAuth";
 
 interface ProductData {
     productName: string;
@@ -27,6 +28,10 @@ interface ProductData {
 
 
 const UpdateProduct = () => {
+    const { checkToken } = useAuth();
+
+    checkToken();
+
     const { id } = useLocalSearchParams<{ id: string }>();
     const [productPlaceholder, setProductPlaceholder] = useState<any>({});
     const [loading, setLoading] = useState(false);

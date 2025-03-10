@@ -24,6 +24,7 @@ import { useRouter } from "expo-router";
 import { useLocalSearchParams } from 'expo-router';
 import { api } from "@/api/axios";
 import { AuthContext } from "@/context/AuthProvider";
+import { useAuth } from "@/hooks/useAuth";
 
 interface Product {
     _id: string;
@@ -37,6 +38,11 @@ interface SaleItem extends Product {
 }
 
 function GerenciadorVendas() {
+    const { checkToken } = useAuth();
+
+    checkToken();
+
+
     const { tokenState } = useContext(AuthContext);
     const { id } = useLocalSearchParams<{ id: string }>();
     const [produtos, setProdutos] = useState<Product[]>([]);

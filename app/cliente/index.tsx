@@ -20,6 +20,7 @@ import { Controller, useForm } from "react-hook-form";
 import { api } from "@/api/axios";
 import { router } from "expo-router";
 import { ListEmptyText } from "../home/styles";
+import { useAuth } from "@/hooks/useAuth";
 interface Cliente {
     _id: string;
     name: string;
@@ -31,6 +32,10 @@ interface Venda {
 }
 
 function Cliente() {
+    const { checkToken } = useAuth();
+
+    checkToken();
+
     const { tokenState } = useContext(AuthContext);
     const { control, handleSubmit, setValue, getValues } = useForm();
 

@@ -20,6 +20,7 @@ import Config from "@/components/Config";
 import FormInput from "@/components/Form";
 import MapComponent from "@/components/Map";
 import Button from "@/components/Button";
+import { useAuth } from "@/hooks/useAuth";
 
 interface LocationType {
     latitude: number;
@@ -37,6 +38,10 @@ interface ClientFormData {
 }
 
 function AddClient() {
+    const { checkToken } = useAuth();
+
+    checkToken();
+
     const [loading, setLoading] = useState<boolean>(false);
     const { tokenState } = useContext(AuthContext);
     const [geolocation, setGeolocation] = useState<LocationType | null>(null);
